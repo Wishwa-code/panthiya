@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{% block title %}Auctions{% endblock %}</title>
+        
+
+        <script>
+            //Collecting data that for react accessing
+            window.__INITIAL_DATA__={
+                logged_in:{{ user.is_authenticated|yesno:"true,false" }},
+                username:"{{ request.user.username|escapejs }}", 
+                login_link:"{% url 'accounts:login' %}",
+                logout_link:"{% url 'accounts:logout' %}"
+            };
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
+        <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>   
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/index.js' %}"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'videochat/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'videochat/layout.css' %}" rel="stylesheet">
+
+        {% block style %}
+        {% endblock %}
+
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="void-container">
+            <div id="main-main-top-bar">
+                <p>company logo, search bar, CTO</p>
+            </div>
+        
+                {% block body %}
+                {% endblock %}
+
+            </div>
+        </div>
+    </body>
+</html>

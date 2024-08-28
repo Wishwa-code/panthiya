@@ -1,0 +1,22 @@
+body {
+    background-color: #219C90;
+    display: flex;
+    max-width: 100vw;
+    flex-direction: column;
+    margin-top: -24px;
+    overflow-x: hidden;
+}
+
+#void-container{
+    width:100vw;
+    display: flex;
+    flex-direction: column;
+}
+#main-main-top-bar{
+    width: 100vw;
+    background-color: rgb(255, 255, 255);
+    height:8vh;
+    display: flex;
+    background-color: #E9B824;
+
+}
