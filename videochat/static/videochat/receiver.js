@@ -52,12 +52,15 @@ function Receiver ({remotedata}) {
   };
 
   const answerCall = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        streamCall(stream);
-      })
-      .catch(console.error);
+    if (navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          streamCall(stream);
+        })
+    } else {
+      console.error('getUserMedia is not supported in this environment.');
+    }
   };
 
   const streamCall = (stream) => {
