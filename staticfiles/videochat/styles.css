@@ -1,0 +1,74 @@
+
+/*
+#app-inner{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+#left-bar{
+    width: 20%;
+    background-color: blanchedalmond;
+}
+#right-bar{
+    width: 80%;
+    background-color: blue;
+
+}
+#myVideo {
+            width: 320px;
+            height: 240px;
+        }
+#ChatTopbar {
+    width: 100%;
+    background-color: antiquewhite;
+}
+
+#Chat-component {
+    width: 100%;
+    background-color: blueviolet;
+}*/
+#main-component{
+    width: 100vw;
+    display:flex;
+    flex-direction: row;
+    border: #E9B824 1px 1px;
+}
+
+#side-navigation-bar{
+    width:20vw;
+    height:1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item{
+    margin-left: 0.5vw;
+    width: 19vw;
+    height: 40px;
+    background-color: aquamarine;
+    margin-top: 10px;
+
+}
+.nav-item a{
+    color: black;
+}
+
+#side-navigation-bar ul {
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0; 
+}
+#my-hairline{
+    width: 1px;
+    height: 100vh;
+    position: sticky;
+    background-color: rgb(255, 255, 255) ;
+    margin-top: 0px;
+}
+#main-inner-window{
+    width: 80vw;
+
+}
+#main-component{
+    height:200px;
+}

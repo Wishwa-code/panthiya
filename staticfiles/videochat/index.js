@@ -64,7 +64,7 @@ function Mainapp ({activetab,currentuser, users, setUsers, logoutLink, loginLink
   const renderContent = () => {
     switch (activetab) {
       case'Classes':
-        return <Conference/>
+        return <div> Content for Tab 2</div>;
       case'Community':
         return <ChatComponent currentuser={currentuser}/>
       case'Submissions':
