@@ -33,7 +33,7 @@ function ChatComponent ({currentuser}) {
           console.log(error);
         });
         
-        window.REACT_APP_WS_ENDPOINT = 'wss://172.20.176.1:8000/';
+        window.REACT_APP_WS_ENDPOINT = 'wss://13.233.106.189:8000/';
         messageConnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${currentuser}/`);
 
         console.log(messageConnectionRef);
