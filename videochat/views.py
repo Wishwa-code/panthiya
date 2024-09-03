@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -21,10 +22,12 @@ from rest_framework.authentication import TokenAuthentication, BasicAuthenticati
 from videochat.authentication import BearerAuthentication
 from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer
 from django.shortcuts import redirect
+from django.http import JsonResponse
+import requests
 
-
-
-
+import base64
+import http.client
+from src.RtcTokenBuilder2 import *
 
 
 
@@ -119,3 +122,51 @@ class EndCall(APIView):
             )
             return Response({'hello': 'world'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class CreateChannelView(APIView):
+    def post(self, request):
+        
+        #channel_name = request.data.get('channelName', 'testChannel' + os.urandom(8).hex())
+        uid = request.data.get('uid', 0) 
+        
+        app_id = '95c3c83fa4a34edc8ed24e22eed1bd82'  
+        app_certificate = '21bf9ec600454bd7954551057fa5581f'
+        token = '007eJxTYMjwYnfireo2MxRIVbgeve9c3NanGy/tO/lFagrrxah76boKDJamycbJFsZpiSaJxiapKckWqSlGJqlGRqmpKYZJKRZGa1uvpjUEMjKwuMezMDJAIIjPzJCRmcnAAAD9PR7O'  
+        channel_name = 'YOUR_CHANNEL_NAME'  
+        
+        # Token validity time in seconds
+        token_expiration_in_seconds = 3600
+        # The validity time of all permissions in seconds
+        privilege_expiration_in_seconds = 3600
+
+
+        if not app_id or not app_certificate:
+            print("Need to set environment variable AGORA_APP_ID and AGORA_APP_CERTIFICATE")
+            return
+        # Generate Token
+        token = RtcTokenBuilder.build_token_with_uid(app_id, app_certificate, channel_name, uid, Role_Publisher,
+                                                    token_expiration_in_seconds, privilege_expiration_in_seconds)
+        print("Token with int uid: {}".format(token))
+        
+        return HttpResponse ({'all good'})
+    
+        #url = f'https://api.agora.io/v1/projects/{app_id}/channels'  
+
+        #headers = {  
+            #'Authorization': f'Bearer {token}',  
+            #'Content-Type': 'application/json'  
+        #}  
+
+        #data = {  
+            #'name': channel_name  
+        #}  
+
+        #response = requests.post(url, headers=headers, json=data)  
+
+        #if response.status_code == 200:  
+            #print(response.json())  
+        #else:  
+            #print(f'Error: {response.status_code}')  
+            #rint(response.text)  
