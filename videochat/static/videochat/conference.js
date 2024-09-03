@@ -153,7 +153,7 @@ function Conference() {
                     Join Channel
                   </button>
                   <button 
-                    classname=''
+                    className=''
                     onClick={() => createMeeting()}
                   >
                     create meeting
