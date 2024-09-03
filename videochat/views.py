@@ -3,7 +3,7 @@ from django.shortcuts import render
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from rest_framework import serializers, status
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .models import Profile, User
 
@@ -128,13 +128,14 @@ class EndCall(APIView):
 class CreateChannelView(APIView):
     def post(self, request):
         
-        #channel_name = request.data.get('channelName', 'testChannel' + os.urandom(8).hex())
+        channel_name = request.data.get('channelName', 'testChannel' + os.urandom(8).hex())
+        print(channel_name)
+        
         uid = request.data.get('uid', 0) 
         
         app_id = '95c3c83fa4a34edc8ed24e22eed1bd82'  
         app_certificate = '21bf9ec600454bd7954551057fa5581f'
-        token = '007eJxTYMjwYnfireo2MxRIVbgeve9c3NanGy/tO/lFagrrxah76boKDJamycbJFsZpiSaJxiapKckWqSlGJqlGRqmpKYZJKRZGa1uvpjUEMjKwuMezMDJAIIjPzJCRmcnAAAD9PR7O'  
-        channel_name = 'YOUR_CHANNEL_NAME'  
+        token = '007eJxTYMjwYnfireo2MxRIVbgeve9c3NanGy/tO/lFagrrxah76boKDJamycbJFsZpiSaJxiapKckWqSlGJqlGRqmpKYZJKRZGa1uvpjUEMjKwuMezMDJAIIjPzJCRmcnAAAD9PR7O'   
         
         # Token validity time in seconds
         token_expiration_in_seconds = 3600
@@ -150,7 +151,12 @@ class CreateChannelView(APIView):
                                                     token_expiration_in_seconds, privilege_expiration_in_seconds)
         print("Token with int uid: {}".format(token))
         
-        return HttpResponse ({'all good'})
+        return JsonResponse({
+            'status': 'success',
+            'token': token,
+            'channel_name': channel_name,
+            'uid': uid
+        })
     
         #url = f'https://api.agora.io/v1/projects/{app_id}/channels'  
 

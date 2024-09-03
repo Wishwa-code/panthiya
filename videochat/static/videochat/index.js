@@ -66,7 +66,7 @@ function Mainapp ({activetab,currentuser, users, setUsers, logoutLink, loginLink
       case'Classes':
         return <div> content for classes tab</div>
       case 'Join Class':
-        return <Conference/>
+        return <Joinclass/>
       case'Community':
         return <ChatComponent currentuser={currentuser}/>
       case'Submissions':
