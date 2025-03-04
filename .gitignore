@@ -4,3 +4,4 @@ dump.rdb
 ec2 setup guide
 startup.sh
 classroom/ssl/
+venv

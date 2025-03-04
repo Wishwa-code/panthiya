@@ -3,3 +3,4 @@ channels==3.0.4
 djangorestframework==3.13.1
 Pillow==9.1.1
 channels-redis==3.4.0
+requests
