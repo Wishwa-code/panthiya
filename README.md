@@ -88,3 +88,18 @@ This document outlines the procedure to start the container and use it effective
      ```
 
 This setup ensures that your development environment is robust and efficient.
+
+
+
+
+
+
+
+So this is the other part
+
+
+So for some reason docker thing is difficult to set up because when running full stack app docker container 
+it needs to call its loopback whole and that loop back port need to mirror loopback port on host, only then application in the containter will be able to communicate  with back again, 
+now comes the other problem even though container is mirroriing its loopback port to the host's loopback port its again going to call the container itself because its a full stack 
+app so the problem is will actually work if it just calling its port itself without call ing for hosts, well seems like it should work because the react part is running and its getting mirrored to out desktop and when we call api caall from client which is in hosts gui it needs to call the container's loopback port then it should work right? 
+for now its a mystery i got it send meesage for now on local host will figure out how it will go
