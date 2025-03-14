@@ -16,6 +16,9 @@ RUN apt-get update \
 # Copy the application code to the container
 COPY . /app
 
+# Ensure start.sh has execute permissions
+RUN chmod +x /app/start.sh
+
 # Install Python dependencies
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt

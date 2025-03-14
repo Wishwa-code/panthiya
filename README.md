@@ -103,3 +103,11 @@ it needs to call its loopback whole and that loop back port need to mirror loopb
 now comes the other problem even though container is mirroriing its loopback port to the host's loopback port its again going to call the container itself because its a full stack 
 app so the problem is will actually work if it just calling its port itself without call ing for hosts, well seems like it should work because the react part is running and its getting mirrored to out desktop and when we call api caall from client which is in hosts gui it needs to call the container's loopback port then it should work right? 
 for now its a mystery i got it send meesage for now on local host will figure out how it will go
+
+
+this is how the docker contaiiner should un to make it workcorrect
+
+
+sudo docker run -p 8000:8000
+
+it needs to be run as porting the 8000 port to the contaitners 8000 port because internal APIs are hardcoded to call port 127.0.0.1:8000 so inorder for this to happeen it should call port 8000 of the host then it will automatically map to container 8000, basically application should map host port 8000 to container port 8000
