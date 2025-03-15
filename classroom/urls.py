@@ -20,9 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin, auth
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
-
-
-from classroom.views import profile
+from classroom.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
