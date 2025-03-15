@@ -1,4 +1,4 @@
-this is just random change to trigger redneder deploy autmatically
+this is another random chantgethis is just random change to trigger redneder deploy autmatically
 # Panthiya
 An online classroom system :
 Simple and resource-efficient mobile-first application designed to meet the basic requirements for Sri Lankan rural communities with access only to mobile phones.
