@@ -26,8 +26,13 @@ SECRET_KEY = 'django-insecure-jnz%f((bbb*@8rpibfjmbybtlqw=j^a3d29w(f1=(+*2xt=^te
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.20.176.1', 'localhost', '127.0.0.1','13.233.106.189']
+ALLOWED_HOSTS = ['172.20.176.1', 'localhost', '127.0.0.1','13.233.106.189','panthiya.onrender.com']
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://panthiya.onrender.com'
+    ]
 
 
 # Application definition
