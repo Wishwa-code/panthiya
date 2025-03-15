@@ -74,7 +74,9 @@ function Mainapp ({activetab,currentuser, users, setUsers, logoutLink, loginLink
       case 'Logout':
         return <div> Logging out...</div>
       default:
-        return <div> Default Content home</div>;
+        return <div> <p>Only online class and peer to peer to peer text messages, audio or video calls are supported at the moment</p></br>
+            <p> to create online classroom go to the join class tab and create class then share the details with other users </p> </br>
+            <p> to message, audio or video calls go to community tab then select your freinds name then you will be able to text and call, if anything gooes wrong plz reload your browser.</div>;
     }
   };
   return (
