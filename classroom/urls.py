@@ -26,6 +26,7 @@ from classroom.views import profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('signup/', SignUpView.as_view(), name='signup'),
     path("accounts/", include(("django.contrib.auth.urls", "auth"), namespace="accounts")),
     path(
         "accounts/password_reset/done/",
