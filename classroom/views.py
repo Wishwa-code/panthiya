@@ -6,7 +6,7 @@ from django.views import generic
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy('accounts/login/')
+    success_url = reverse_lazy('accounts:login')  # Use the named URL pattern for login
     template_name = 'registration/signup.html'
 
 @login_required
