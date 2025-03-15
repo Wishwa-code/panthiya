@@ -9,6 +9,6 @@ urlpatterns = [
     path('start-call/', StartCall.as_view()),
     path('end-call/', EndCall.as_view()),
     path('create-channel/', CreateChannelView.as_view(), name='create-channel')
-    path('signup/', SignUpView.as_view(), name='signup'),
+
 
 ]
