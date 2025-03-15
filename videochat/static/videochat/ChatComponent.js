@@ -33,7 +33,7 @@ function ChatComponent ({currentuser}) {
           console.log(error);
         });
         
-        window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
+        window.REACT_APP_WS_ENDPOINT = 'wss://panthiya.onrender.com/';
         messageConnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${currentuser}/`);
 
         console.log(messageConnectionRef);

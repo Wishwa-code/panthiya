@@ -108,7 +108,7 @@ function Maincomponent (){
 
   React.useEffect(() => {
     /*React.store.dispatch('generatePeerId');*/
-    window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
+    window.REACT_APP_WS_ENDPOINT = 'wss://panthiya.onrender.com/';
 
     connectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/notification/`);
 
