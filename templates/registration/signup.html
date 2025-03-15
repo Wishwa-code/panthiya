@@ -10,5 +10,8 @@
         {{ form.as_p }}
         <button type="submit">Sign Up</button>
     </form>
+    <div class="signup-link">
+      <a href="{% url 'accounts:login' %}">{% translate "Don't have an account? Register" %}</a>
+      </div>
 </body>
 </html>
