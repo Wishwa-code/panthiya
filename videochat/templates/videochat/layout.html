@@ -1,10 +1,9 @@
-{% load static %}
-
+{% spaceless %}{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"  />
 
         <title>{% block title %}Auctions{% endblock %}</title>
         
@@ -30,17 +29,20 @@
         <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
         <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>   
         <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
         <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
 
-	<script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/main_container.js' %}"></script>
+	    <script type="text/babel" src="{% static 'videochat/navigation_bar.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/joinClass.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/conference.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/index.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/app.js' %}"></script>
        
         {% block style %}
         {% endblock %}
@@ -50,14 +52,10 @@
     </head>
     <body>
         <div id="void-container">
-            <div id="main-main-top-bar">
-                <p>welcome to panthiya online classroom</p>
-            </div>
-            <div> 
                 {% block body %}
                 {% endblock %}
 
-            </div>
         </div>
     </body>
 </html>
+{% endspaceless %}

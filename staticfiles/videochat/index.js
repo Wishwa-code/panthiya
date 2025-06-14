@@ -108,7 +108,9 @@ function Maincomponent (){
 
   React.useEffect(() => {
     /*React.store.dispatch('generatePeerId');*/
-    window.REACT_APP_WS_ENDPOINT = 'wss://172.20.176.1:8000/';
+    window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
+
+    console.log("🕵️‍♀️Client is connecting to -> ", window.REACT_APP_WS_ENDPOINT);
 
     connectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/notification/`);
 

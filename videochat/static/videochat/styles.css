@@ -1,32 +1,3 @@
-
-/*
-#app-inner{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-#left-bar{
-    width: 20%;
-    background-color: blanchedalmond;
-}
-#right-bar{
-    width: 80%;
-    background-color: blue;
-
-}
-#myVideo {
-            width: 320px;
-            height: 240px;
-        }
-#ChatTopbar {
-    width: 100%;
-    background-color: antiquewhite;
-}
-
-#Chat-component {
-    width: 100%;
-    background-color: blueviolet;
-}*/
 #main-component{
     width: 100vw;
     display:flex;
@@ -34,41 +5,75 @@
     border: #E9B824 1px 1px;
 }
 
-#side-navigation-bar{
-    width:20vw;
-    height:1000px;
+
+#main-inner-window{
+    display: flex;
+    width:auto;
+    flex-grow:1;
+    /* transition: margin-left 0.3s ease-in-out; */
+}
+
+
+.navbar {
     display: flex;
     flex-direction: column;
-}
-
-.nav-item{
-    margin-left: 0.5vw;
-    width: 19vw;
-    height: 40px;
-    background-color: aquamarine;
-    margin-top: 10px;
-
-}
-.nav-item a{
-    color: black;
-}
-
-#side-navigation-bar ul {
-  list-style-type: none; 
-  padding: 0; 
-  margin: 0; 
-}
-#my-hairline{
-    width: 1px;
+    justify-content: start;
+    /* top: 0; */
+    /* left: -300px; Initially hidden */
+    width: 300px;
     height: 100vh;
-    position: sticky;
-    background-color: rgb(255, 255, 255) ;
-    margin-top: 0px;
+    background-color: #333;
+    color: white;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth animation for both width and opacity */
+    /* z-index: 1000; */
+    padding: 0px;
 }
-#main-inner-window{
-    width: 80vw;
 
+.navbar.visible {
+    width: 0px; /* Slide in */
+    opacity:0;
 }
-#main-component{
-    height:200px;
+
+.navbar ul {
+    list-style: none;
+    /* padding: 0; */
+}
+
+.navbar li {
+    /* padding: 10px; */
+    color: white;
+    cursor: pointer;
+}
+
+/* Toggle Button Styles */
+.toggle-button {
+    position: fixed;
+    left: 0px;
+    z-index: 1100;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    /* padding: 10px; */
+    cursor: pointer;
+    transition: left 0.3s ease-in-out;
+    width:50px;
+    /* height:100px */
+}
+
+.toggle-button.visible {
+    left: 300px; /* Slide in */
+}
+
+/* Styles for chevron rotation and size */
+.chevron {
+  display: inline-block;
+  transition: transform 0.7s ease;
+  font-size:60px; 
+  transform-origin: 50% 50%;
+  vertical-align: middle;
+  padding-bottom: 20px;
+}
+
+.rotate {
+  transform: rotate(180deg);
 }

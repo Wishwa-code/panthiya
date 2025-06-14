@@ -20,7 +20,7 @@ function ChatComponent ({currentuser}) {
   }, [users]);
 
   React.useEffect(() => {
-        console.log(currentuser)
+        console.log(' currennt user ', currentuser)
         axios.get('users/')
         .then(response => {
         setUsers((prevUsers) => {
@@ -33,10 +33,13 @@ function ChatComponent ({currentuser}) {
           console.log(error);
         });
         
-        window.REACT_APP_WS_ENDPOINT = 'wss://172.20.176.1:8000/';
+        window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
         messageConnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${currentuser}/`);
 
-        console.log(messageConnectionRef);
+        console.log("🕵️‍♀️Client is connecting to -> ", window.REACT_APP_WS_ENDPOINT);
+
+
+        console.log('message connectionn',messageConnectionRef);
 
         messageConnectionRef.current.onmessage = (event) => {
             const eventJSON = JSON.parse(event.data);
