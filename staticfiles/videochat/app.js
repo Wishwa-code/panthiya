@@ -53,7 +53,7 @@ function App (){
     
 
   const [activetab, setActivetab] = React.useState('home')
-
+  const tabs = ['Home','Classes','Join Class', 'Community' , 'Submissions', 'Logout'];
 
   if (!initialData){
     return<div>loading</div>;
@@ -62,10 +62,10 @@ function App (){
   return (
     
     <>
-      <NavigationBar profileImage={initialData.profile_image} activetab={activetab} setActivetab={setActivetab} loggedin={initialData.logged_in}  user={initialData.username} logoutLink={initialData.logout_link} loginLink={initialData.login_link}/>
+      <NavigationBar tabs={tabs} profileImage={initialData.profile_image} activetab={activetab} setActivetab={setActivetab} loggedin={initialData.logged_in}  user={initialData.username} />
       {/* <hr id="my-hairline"></hr> */}
       {console.log("initial data loaded inside html",initialData)}
-      <MainContainer activetab={activetab} currentuser={initialData.username}  />
+      <MainContainer activetab={activetab} currentuser={initialData.username} logoutLink={initialData.logout_link} loginLink={initialData.login_link} />
     </>
   )
 }

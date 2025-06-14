@@ -14,7 +14,9 @@ from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent  
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_BASE_DIR = Path(__file__).resolve().parent.parent  
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -72,10 +74,11 @@ REST_FRAMEWORK = {
 
 ROOT_URLCONF = 'classroom.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [TEMPLATE_BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -145,9 +148,6 @@ LOGOUT_REDIRECT_URL = '/account/login'
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Define STATIC_ROOT for collecting static files in production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -181,3 +181,8 @@ CORS_ALLOWED_ORIGINS = [
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

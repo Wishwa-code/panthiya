@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    photo = models.ImageField(null=True, blank=True, default='girl.svg')
+    photo = models.ImageField(null=True, blank=True, default='girl.svg',upload_to='images/')
     status = models.CharField(default="Hi i'm using dj chat", max_length=255)
     online = models.BooleanField(default=False)
     
