@@ -14,7 +14,8 @@
                 logged_in:{{ user.is_authenticated|yesno:"true,false" }},
                 username:"{{ request.user.username|escapejs }}", 
                 login_link:"{% url 'accounts:login' %}",
-                logout_link:"{% url 'accounts:logout' %}"
+                logout_link:"{% url 'accounts:logout' %}",
+                profile_image: "{{ profile.photo.url|escapejs }}"
             };
 
         </script>

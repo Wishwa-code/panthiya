@@ -1,4 +1,4 @@
-function NavigationBar ({tabs, setActivetab, activetab, user}){
+function NavigationBar ({tabs, setActivetab, activetab, user, profileImage}){
     const [isVisible, setIsVisible] = React.useState(false);
 
     const toggleVisibility = () => {
@@ -6,26 +6,38 @@ function NavigationBar ({tabs, setActivetab, activetab, user}){
     };
 
   console.log(tabs)
+  console.log('profile image',profileImage)
   return(
     
 
         <>
             <div id="side-navigation-bar" className={`navbar ${isVisible ? '' : 'visible'}`}>
-                <p>{user}</p>
+                <div className="profile-section">
+                    <img className="profile-pic" src={profileImage} alt="User" />
+                    <p className="user-name">{user}</p>
+                </div>
                 {console.log(user)}
                 <ul class="top_bar_nav">
                     {tabs.map((tab) => (
                         <li 
-                        class="nav-item" 
+                        className={`nav-item ${activetab === tab ? 'active' : ''}`}
                         key={tab}
                         onClick={()=> setActivetab(tab)}
                         >
-                        <p class="nav-link" href="">
-                            {tab}  
-                        </p>
+                            <span className="icon">🏠</span>
+                            <p className="nav-link">{tab}</p>
                         </li>
                     ))}
                 </ul>
+
+                {/* CTA Button */}
+                <button className="create-button">Create a Classroom</button>
+
+                {/* Bottom Settings */}
+                <div className="bottom-options">
+                    <div className="option-item"><span className="icon">❓</span> Help and Support</div>
+                    <div className="option-item"><span className="icon">⚙️</span> Settings</div>
+                </div>
             </div>
 
             <button className={`toggle-button ${isVisible ? 'visible' : ''}`} onClick={toggleVisibility}>

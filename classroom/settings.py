@@ -145,6 +145,9 @@ LOGOUT_REDIRECT_URL = '/account/login'
 
 STATIC_URL = 'static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Define STATIC_ROOT for collecting static files in production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

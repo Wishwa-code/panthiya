@@ -62,7 +62,7 @@ function App (){
   return (
     
     <>
-      <NavigationBar tabs={tabs} activetab={activetab} setActivetab={setActivetab} loggedin={initialData.logged_in}  user={initialData.username} />
+      <NavigationBar tabs={tabs} profileImage={initialData.profile_image} activetab={activetab} setActivetab={setActivetab} loggedin={initialData.logged_in}  user={initialData.username} />
       {/* <hr id="my-hairline"></hr> */}
       {console.log("initial data loaded inside html",initialData)}
       <MainContainer activetab={activetab} currentuser={initialData.username} logoutLink={initialData.logout_link} loginLink={initialData.login_link} />

@@ -37,11 +37,14 @@ def index(request):
     
     myData = True
     user_list = User.objects.all()
-    print(user_list)
+    
+    profile = Profile.objects.get(user=request.user.id)
+    print("freinds:", user_list, "Profile:",profile)
     
     return render (request, 'videochat/react.html',{
         'myData': myData,
         'user_list': user_list,
+        'profile': profile,
     })
     
 
