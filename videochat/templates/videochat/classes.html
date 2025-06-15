@@ -1,0 +1,58 @@
+{% extends "videochat/layout.html" %}
+{% load static %}
+{% block body %} 
+
+            <div id="main-component">
+                <div id="sidebar-wrapper"></div>
+                <div id="main_container_wrapper"></div>
+            </div>
+            <!--
+            <script>
+                const videoElement = document.getElementById('myVideo');
+
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(error => {
+                        console.error('Error accessing   media devices:', error);
+                    });
+            </script>
+            -->
+
+{% endblock %}
+
+
+{% block script %}
+
+        <script>
+            //Collecting data that for react accessing
+            window.__INITIAL_DATA__={
+                logged_in:{{ user.is_authenticated|yesno:"true,false" }},
+                username:"{{ request.user.username|escapejs }}", 
+                login_link:"{% url 'accounts:login' %}",
+                logout_link:"{% url 'accounts:logout' %}",
+                profile_image: "{{ profile.photo.url|escapejs }}"
+            };
+        </script>
+        <!-- <script src="https://kit.fontawesome.com/8056cc3b3e.js" crossorigin="anonymous"></script>
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>   
+        <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script> -->
+
+        <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+        <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script> -->
+
+	    <script type="text/babel" src="{% static 'videochat/navigation_bar.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/joinClass.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/conference.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/class_app.js' %}"></script>
+{% endblock %}
+
+

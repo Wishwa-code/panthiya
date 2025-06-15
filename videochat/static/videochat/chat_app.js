@@ -65,7 +65,7 @@ function App (){
       <NavigationBar profileImage={initialData.profile_image} activetab={activetab} setActivetab={setActivetab} loggedin={initialData.logged_in}  user={initialData.username} logoutLink={initialData.logout_link} loginLink={initialData.login_link}/>
       {/* <hr id="my-hairline"></hr> */}
       {console.log("initial data loaded inside html",initialData)}
-      <MainContainer activetab={activetab} currentuser={initialData.username}  />
+      <ChatComponent currentuser={initialData.username}/>
     </>
   )
 }

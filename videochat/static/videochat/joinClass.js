@@ -11,22 +11,20 @@ function Joinclass () {
     if (view === 'main') {
         return(
             <div className="joinclass">
-                <button
-                className=""
-                onClick={() => displayjoin()}
-                > 
-                Join class 
-                </button>
-                <button
-                className=""
-                onClick={() => displaycreate()}
-                >
-                Create class
-                </button>
+
+                <h2>Choose an Option</h2>
+                <div className="card-container">
+                <div className="card-button" onClick={displayjoin}>
+                    <h3>Join Class</h3>
+                </div>
+                <div className="card-button" onClick={displaycreate}>
+                    <h3>Create Class</h3>
+                </div>
             </div>
-            
+            </div>
         )
     }
+    
     if (view === 'create') {
         return(
             <>

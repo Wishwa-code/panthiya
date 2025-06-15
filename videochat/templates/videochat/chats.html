@@ -1,0 +1,49 @@
+{% extends "videochat/layout.html" %}
+{% load static %}
+{% block body %} 
+
+            <div id="main-component">
+                <div id="sidebar-wrapper"></div>
+                <div id="main_container_wrapper"></div>
+            </div>
+            <!--
+            <script>
+                const videoElement = document.getElementById('myVideo');
+
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(error => {
+                        console.error('Error accessing   media devices:', error);
+                    });
+            </script>
+            -->
+
+{% endblock %}
+
+
+{% block script %}
+
+        <script>
+            //Collecting data that for react accessing
+            window.__INITIAL_DATA__={
+                logged_in:{{ user.is_authenticated|yesno:"true,false" }},
+                username:"{{ request.user.username|escapejs }}", 
+                login_link:"{% url 'accounts:login' %}",
+                logout_link:"{% url 'accounts:logout' %}",
+                profile_image: "{{ profile.photo.url|escapejs }}"
+            };
+        </script>
+
+	    <script type="text/babel" src="{% static 'videochat/navigation_bar.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/joinClass.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/conference.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
+        <script type="text/babel" src="{% static 'videochat/chat_app.js' %}"></script>
+{% endblock %}
+
+

@@ -9,41 +9,6 @@
 
 /* !------------- Navigation bar styles -------------! */
 
-/* .navbar {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    top: 0;
-    left: -300px; Initially hidden
-    width: 300px;
-    height: 100vh;
-    background-color: #111A22;
-    color: white;
-    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; 
-    padding: 0px;
-} */
-
-/* .navbar.visible {
-    width: 0px; 
-    opacity:0;
-} */
-
-.navbar ul {
-    list-style: none;
-    /* padding: 0; */
-}
-
-.navbar li {
-    /* padding: 10px; */
-    color: white;
-    cursor: pointer;
-}
-
-/* !------------- Toggle Button styles -------------! */
-
-
-/* Toggle Button Styles */
-
 .navbar {
   display: flex;
   flex-direction: column;
@@ -62,27 +27,15 @@
   opacity: 0;
   overflow: hidden;
 }
-
-.profile-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  width: 100%;
-  padding-left: 10px;
-
-
+.navbar ul {
+    list-style: none;
+    /* padding: 0; */
 }
 
-.profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.user-name {
-  font-size: 16px;
-  font-weight: 500;
+.navbar li {
+    /* padding: 10px; */
+    color: white;
+    cursor: pointer;
 }
 
 .top_bar_nav {
@@ -108,8 +61,8 @@
 }
 .nav-bar-icons{
   width:20px;
-  padding-left: 10px;
-  padding-right: 20px;
+  padding-left: 0px;
+  margin-right: 20px;
 
 }
 
@@ -164,6 +117,9 @@
   color: white;
 }
 
+/* !------------- Toggle Button styles -------------! */
+
+
 /* Toggle Button Styles */
 .toggle-button {
   position: fixed;
@@ -195,4 +151,68 @@
 
 .rotate {
   transform: rotate(180deg);
+}
+
+
+/* !------------- Profile section styles -------------! */
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  width: 100%;
+  padding-left: 10px;
+
+
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+/* !------------- Class Page Styles -------------! */
+.joinclass {
+  text-align: center;
+  padding: 2rem;
+}
+
+.joinclass h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.card-button {
+  cursor: pointer;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  background: #f9f9f9;
+  transition: transform 0.2s;
+}
+
+.card-button:hover {
+  transform: scale(1.05);
+}
+
+.card-button h3 {
+  margin: 0;
+  font-size: 1.2rem;
 }

@@ -41,7 +41,23 @@ def index(request):
     profile = Profile.objects.get(user=request.user.id)
     print("freinds:", user_list, "Profile:",profile)
     
-    return render (request, 'videochat/react.html',{
+    return render (request, 'videochat/classes.html',{
+        'myData': myData,
+        'user_list': user_list,
+        'profile': profile,
+    })
+
+def chats(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts/login')
+    
+    myData = True
+    user_list = User.objects.all()
+    
+    profile = Profile.objects.get(user=request.user.id)
+    print("freinds:", user_list, "Profile:",profile)
+    
+    return render (request, 'videochat/chats.html',{
         'myData': myData,
         'user_list': user_list,
         'profile': profile,
