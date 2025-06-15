@@ -6,23 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"  />
 
         <title>{% block title %}Auctions{% endblock %}</title>
-        
-
-        <!-- <script>
-            //Collecting data that for react accessing
-            window.__INITIAL_DATA__={
-                logged_in:{{ user.is_authenticated|yesno:"true,false" }},
-                username:"{{ request.user.username|escapejs }}", 
-                login_link:"{% url 'accounts:login' %}",
-                logout_link:"{% url 'accounts:logout' %}",
-                profile_image: "{{ profile.photo.url|escapejs }}"
-            };
-
-        </script> -->
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'videochat/styles.css' %}" rel="stylesheet">
         <link href="{% static 'videochat/layout.css' %}" rel="stylesheet">
+        <link href="{% static 'videochat/sidenav.css' %}" rel="stylesheet">
+
 
 
         <script src="https://kit.fontawesome.com/8056cc3b3e.js" crossorigin="anonymous"></script>
@@ -35,16 +23,7 @@
         <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
         <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
 
-        <!-- <script type="text/babel" src="{% static 'videochat/main_container.js' %}"></script>
-	    <script type="text/babel" src="{% static 'videochat/navigation_bar.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/joinClass.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/conference.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/app.js' %}"></script>
-        -->
+
         {% block style %}
         {% endblock %}
 
@@ -54,9 +33,7 @@
     <body>
         
 
-            <!-- <button className={`toggle-button ${isVisible ? 'visible' : ''}`} onClick={toggleVisibility}>
-                <span className={`chevron ${isVisible ? 'rotate' : ''}`}>&#8250;</span>
-            </button> -->
+
         <div id="void-container">
             <div id="side-navigation-bar" class="navbar">
                 <div class="profile-section">
@@ -88,10 +65,10 @@
                         <span className="icon">⚙️</span> 
                         Settings
                     </div>
-                    <div class="option-item" onClick={handleLogout}>
+                    <a href="{% url 'accounts:logout' %}" class="option-item" >
                         <span className="icon">🪵➡️</span> 
                         Logout
-                    </div>
+                    </a>
                 </div>
             </div>
                 {% block body %}
