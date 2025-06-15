@@ -15,3 +15,29 @@ class Message(models.Model):
     date_time = models.DateTimeField(auto_now_add=True, blank=True)
     sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='receiver', on_delete=models.CASCADE)
+
+class Classrooms(models.Model):
+    name = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255, blank=True, null=True)
+    grade = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField()
+    instructor = models.CharField(max_length=255, blank=True, null=True)
+    owner = models.ForeignKey(User, related_name='classroom_owner', on_delete=models.CASCADE)
+    members = models.ManyToManyField(User, related_name='classroom_members', blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+    
+    def serialize(self):
+        members_count= self.members.count()
+        return {
+            "id": self.id,
+            "name": self.name,
+            "instructor": self.instructor,
+            "grade": self.grade,
+            "subject": self.subject,
+            "description": self.description,
+            "members_count": members_count,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p")
+        }

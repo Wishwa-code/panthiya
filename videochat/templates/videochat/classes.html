@@ -3,6 +3,37 @@
 {% block body %} 
 
             <div id="main-component">
+                {% for classroom in page_obj %}
+                {# Each "contact" is a Contact model object. #}
+                    <div id="index_classroom_wrapper">
+                        <!-- <div id="index_post_photo">
+                            <img id="post-post-image" src="{{classroom.image_url}}" alt="{{post.image}}">    
+                        </div> -->
+                        <div id="index_classroom_item">
+                            <div id="first-div-inside-classroom">
+                                <p class="classroom-id">{{classroom.id}}</id>
+                                        <p><b>{{classroom.name}}</b></p>
+            
+                                <!-- {% if request.user.username == post.username %}
+                                    <button class="edit_button" data-post-id="{{post.id}}"> Edit </button>
+                                {% endif %} -->
+                            </div>
+
+                            <div id="second-div-inside-post">
+                                <div id="{{classroom.id}}">
+                                    {{classroom.instructor}}
+                                </div>
+                                <p id="post-timestamp">{{classroom.timestamp}}</p>
+                            </div>
+
+                            <!-- <div id="thrid-div-inside-post">
+                                    <button class="like-button" data-post-id="{{post.id}}" data-liked="{% if request.user.username in post.liked_by %}remove-like{% else %}add-like{% endif%}">{% if request.user.username in post.liked_by %}❤️ {% else %} 🤍{% endif%}️</button>
+                                    <div id="num-of-likes{{post.id}}">{{post.num_likes}}</div>
+                            </div>  -->
+                        </div>
+                    </div>
+                    
+                {% endfor %}
 
             </div>
 
@@ -11,7 +42,7 @@
 
 
 {% block script %}
-
+        <link href="{% static 'videochat/classes.css' %}" rel="stylesheet">
         <script>
             //Collecting data that for react accessing
             window.__INITIAL_DATA__={
@@ -22,6 +53,8 @@
                 profile_image: "{{ profile.photo.url|escapejs }}"
             };
         </script>
+        <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
+
 
 	    <script type="text/babel" src="{% static 'videochat/sidenav_toggle_button.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/createClass.js' %}"></script>

@@ -5,7 +5,7 @@ from channels.layers import get_channel_layer
 from rest_framework import serializers, status
 from django.http import HttpResponse, JsonResponse
 
-from .models import Profile, User
+from .models import Profile, User, Classrooms
 
 from django.contrib.auth.models import User
 from rest_framework.generics import CreateAPIView
@@ -18,6 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
+from django.core.paginator import Paginator
 
 from videochat.authentication import BearerAuthentication
 from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer
@@ -37,7 +38,19 @@ def index(request):
     
     myData = True
     user_list = User.objects.all()
-    
+    classes = Classrooms.objects.filter(members=request.user.id)
+    print('classes of requested user',classes)
+    all_classes_count = classes.count()
+    class_list = classes.order_by("-timestamp").all()
+    class_list = [classroom.serialize() for classroom in class_list]
+    paginator = Paginator(class_list, 10)
+
+    page_number= request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    print(page_obj)
+
+
     profile = Profile.objects.get(user=request.user.id)
     print("freinds:", user_list, "Profile:",profile)
     
@@ -45,6 +58,7 @@ def index(request):
         'myData': myData,
         'user_list': user_list,
         'profile': profile,
+        'page_obj': page_obj,
     })
 
 def chats(request):
@@ -158,6 +172,7 @@ class CreateChannelView(APIView):
         
         # Token validity time in seconds
         token_expiration_in_seconds = 3600
+
         # The validity time of all permissions in seconds
         privilege_expiration_in_seconds = 3600
 
