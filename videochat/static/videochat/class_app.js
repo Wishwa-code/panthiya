@@ -5,7 +5,7 @@ function getCookie(name) {
 }
 
 
-ReactDOM.render(<App />, document.querySelector("#main-component"));
+ReactDOM.render(<App />, document.querySelector("#create-class-button"));
 
 function App (){
 

@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 300px;
+  min-width: 300px;
   height: 100vh;
   background-color: #111A22;
   color: white;
@@ -22,7 +22,8 @@
 }
 
 .navbar.visible {
-  width: 0px;
+  min-width: 0px;
+  width:0px;
   opacity: 0;
   overflow: hidden;
 }
@@ -121,8 +122,9 @@
 
 /* Toggle Button Styles */
 .toggle-button {
-  position: fixed;
+  position: absolute;
   left: 0px;
+  top:0px;
   z-index: 1100;
   background-color: #E8B824;
   color: #16161E;
