@@ -4,6 +4,38 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    function NextComponent({ localMic, localCam, remoteUsers }) {
+  return (
+    <div className="next-component">
+      <h3>Chat & Controls</h3>
+      <button onClick={() => localMic && localMic.setEnabled(!localMic.enabled)}>
+        {localMic && localMic.enabled ? 'Mute Mic' : 'Unmute Mic'}
+      </button>
+      <button onClick={() => localCam && localCam.setEnabled(!localCam.enabled)}>
+        {localCam && localCam.enabled ? 'Turn Off Cam' : 'Turn On Cam'}
+      </button>
+      <p>Participants: {1 + remoteUsers.length}</p>
+    </div>
+  );
+}
+
+function Main({ localMic, localCam, remoteUsers }) {
+  return (
+    <>
+      <UserList
+        localMic={localMic}
+        localCam={localCam}
+        remoteUsers={remoteUsers}
+      />
+      <NextComponent
+        localMic={localMic}
+        localCam={localCam}
+        remoteUsers={remoteUsers}
+      />
+    </>
+  );
+}
+
     function UserList({ localMic, localCam, remoteUsers }) {
         return (
             <div className="user-list">
@@ -25,7 +57,9 @@
                         <samp className="user-name">{user.uid}</samp>
                     </div>
                 ))}
+                
             </div>
+            
         );
     }
 
@@ -140,11 +174,20 @@
                 if (container) {
                     container.innerHTML = "";
                     ReactDOM.render(
-                        <UserList localMic={localMicrophoneTrack} localCam={localCameraTrack} remoteUsers={remoteUsers} />,
+                       <Main
+                            localMic={localMicrophoneTrack}
+                            localCam={localCameraTrack}
+                            remoteUsers={remoteUsers}
+                            
+                            />,
                         container
                     );
                 }
             }
+            return () => {
+                console.log("Cleaning up client");
+              client.current && client.current.leave();
+            };
         }, [isConnected]);
 
         return (

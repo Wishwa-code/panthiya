@@ -115,7 +115,7 @@
 }
 
 .join-class-button{
-  background-color: #cc0000; /* YouTube red */
+  background-color: #E8B824; /* YouTube red */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -129,7 +129,7 @@
 }
 
 .join-class-button:hover {
-  background-color: #b30000;
+  background-color: #E8B824;
   transform: scale(1.05);
 }
 
