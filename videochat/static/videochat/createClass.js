@@ -1,4 +1,4 @@
-  const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useRef } = React;
   const { createRoot } = ReactDOM;
   const { createPortal } = ReactDOM;
 
@@ -26,12 +26,27 @@
     );
   }
 
-  function NextComponent({ onMicToggle, onCamToggle, onHangup, remoteUsers }) {
+  function Devicetools({ onMicToggle, onCamToggle, onHangup, remoteUsers, micOn, cameraOn, calling }) {
     return (
-      <div className="next-component">
-        <button onClick={onMicToggle}>Mic</button>
-        <button onClick={onCamToggle}>Cam</button>
-        <button onClick={onHangup}>Hang Up</button>
+      <div className="device-tools">
+        <button onClick={onMicToggle} className="icon-button">
+            {micOn ?
+                <i className={`fa-duotone fa-solid fa-microphone-slash `} /> 
+                : <i className={`fa-duotone fa-solid fa-microphone `} /> 
+        } 
+        </button>
+        <button onClick={onCamToggle} className="icon-button">
+            {cameraOn ?
+                <i className={`fa-duotone fa-solid fa-video-slash `} /> 
+                : <i className={`fa-duotone fa-solid fa-video `} /> 
+        } 
+        </button>
+        <button onClick={onHangup} className="icon-button">
+            {calling ?
+                <i className={`fa-duotone fa-solid fa-phone-slash `} /> 
+                : <i className={`fa-duotone fa-solid fa-phone `} /> 
+        } 
+        </button>
         <p>Participants: {1 + remoteUsers.length}</p>
       </div>
     );
@@ -41,7 +56,7 @@
     return (
       <>
         <UserList remoteUsers={props.remoteUsers} />
-        <NextComponent {...props} />
+        <Devicetools {...props} />
       </>
     );
   }
@@ -70,20 +85,31 @@
         }
       });
 
-      client.on("user-unpublished", user => {
-        setRemoteUsers(us => us.filter(u => u.uid !== user.uid));
-      });
-
+        client.on("user-unpublished", (user, mediaType) => {
+        if (mediaType === "video") {
+            setRemoteUsers(us =>
+            us.map(u =>
+                u.uid === user.uid ? { ...u, videoTrack: null } : u
+            ).filter(u => u.videoTrack)
+            );
+        }
+        // No need to remove the user entirely when audio-only is unpublished
+        });
+        
       return () => client.leave();
     }, []);
 
     const createLocalTracks = async () => {
-      const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks();
-      setLocalMicTrack(mic);
-      setLocalCamTrack(cam);
-      mic.play("local-microphone");
-      cam.play("local-camera");
-      clientRef.current.publish([mic, cam]);
+      let localAudioTrack = null;
+      let localVideoTrack = null;
+      localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+      localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+    //   const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks();
+      setLocalMicTrack(localAudioTrack);
+      setLocalCamTrack(localVideoTrack);
+      localAudioTrack.play("local-microphone");
+      localVideoTrack.play("local-camera");
+      clientRef.current.publish([localAudioTrack, localVideoTrack]);
     };
 
     const joinCall = async () => {
@@ -107,7 +133,7 @@
 
     const toggleMic = () => {
       if (localMicTrack) {
-        localMicTrack.setEnabled(!micOn);
+        localMicTrack.setMuted(!micOn);
         setMicOn(!micOn);
       }
     };
@@ -142,6 +168,10 @@
             onMicToggle={toggleMic}
             onCamToggle={toggleCam}
             onHangup={hangup}
+            micOn={micOn}
+            cameraOn={camOn}
+            calling={isConnected}
+
             />
         </Portal>
         //   document.getElementById("main-component")
