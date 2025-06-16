@@ -1,209 +1,173 @@
- function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
+  const { useState, useEffect, useRef } = React;
+  const { createRoot } = ReactDOM;
+  const { createPortal } = ReactDOM;
 
-    function NextComponent({ localMic, localCam, remoteUsers }) {
-  return (
-    <div className="next-component">
-      <h3>Chat & Controls</h3>
-      <button onClick={() => localMic && localMic.setEnabled(!localMic.enabled)}>
-        {localMic && localMic.enabled ? 'Mute Mic' : 'Unmute Mic'}
-      </button>
-      <button onClick={() => localCam && localCam.setEnabled(!localCam.enabled)}>
-        {localCam && localCam.enabled ? 'Turn Off Cam' : 'Turn On Cam'}
-      </button>
-      <p>Participants: {1 + remoteUsers.length}</p>
-    </div>
-  );
-}
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    return parts.length === 2 ? parts.pop().split(';').shift() : null;
+  }
 
-function Main({ localMic, localCam, remoteUsers }) {
-  return (
-    <>
-      <UserList
-        localMic={localMic}
-        localCam={localCam}
-        remoteUsers={remoteUsers}
-      />
-      <NextComponent
-        localMic={localMic}
-        localCam={localCam}
-        remoteUsers={remoteUsers}
-      />
-    </>
-  );
-}
+  function UserList({ remoteUsers }) {
+    return (
+      <div className="user-list">
+        <div className="user">
+          <video id="local-camera" />
+          <audio id="local-microphone" />
+          <samp>You</samp>
+        </div>
+        {remoteUsers.map(u => (
+          <div className="user" key={u.uid}>
+            <video ref={el => el && u.videoTrack && u.videoTrack.play(el)} />
+            <samp>{u.uid}</samp>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-    function UserList({ localMic, localCam, remoteUsers }) {
-        return (
-            <div className="user-list">
-                <div className="user">
-                    <video id="local-camera" />
-                    <audio id="local-microphone" />
-                    <samp className="user-name">You</samp>
-                </div>
-                {remoteUsers.map((user) => (
-                    <div className="user" key={user.uid}>
-                        <video
-                            id={`remote-video-${user.uid}`}
-                            ref={(video) => {
-                                if (video && user.videoTrack) {
-                                    user.videoTrack.play(video);
-                                }
-                            }}
-                        />
-                        <samp className="user-name">{user.uid}</samp>
-                    </div>
-                ))}
-                
-            </div>
-            
-        );
-    }
+  function NextComponent({ onMicToggle, onCamToggle, onHangup, remoteUsers }) {
+    return (
+      <div className="next-component">
+        <button onClick={onMicToggle}>Mic</button>
+        <button onClick={onCamToggle}>Cam</button>
+        <button onClick={onHangup}>Hang Up</button>
+        <p>Participants: {1 + remoteUsers.length}</p>
+      </div>
+    );
+  }
 
-    function CreateClass({ appId, channel, token }) {
-        const [calling, setCalling] = React.useState(false);
-        const [isConnected, setIsConnected] = React.useState(false);
-        const [micOn, setMicOn] = React.useState(true);
-        const [cameraOn, setCameraOn] = React.useState(true);
-        const [localMicrophoneTrack, setLocalMicrophoneTrack] = React.useState(null);
-        const [localCameraTrack, setLocalCameraTrack] = React.useState(null);
-        const [remoteUsers, setRemoteUsers] = React.useState([]);
-        const client = React.useRef(null);
+  function Main(props) {
+    return (
+      <>
+        <UserList remoteUsers={props.remoteUsers} />
+        <NextComponent {...props} />
+      </>
+    );
+  }
 
-        const csrftoken = getCookie('csrftoken');
+  function CreateClass({ appId, channel, token }) {
+    const [isConnected, setIsConnected] = useState(false);
+    const [micOn, setMicOn] = useState(true);
+    const [camOn, setCamOn] = useState(true);
+    const [localMicTrack, setLocalMicTrack] = useState(null);
+    const [localCamTrack, setLocalCamTrack] = useState(null);
+    const [remoteUsers, setRemoteUsers] = useState([]);
+    const clientRef = useRef(null);
+    const csrftoken = getCookie('csrftoken');
 
-        const createLocalTracks = async () => {
-            const [microphoneTrack, cameraTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-            setLocalMicrophoneTrack(microphoneTrack);
-            setLocalCameraTrack(cameraTrack);
-            microphoneTrack.play("local-microphone");
-            cameraTrack.play("local-camera");
-            client.current.publish([microphoneTrack, cameraTrack]);
-        };
+    useEffect(() => {
+      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      clientRef.current = client;
 
-        const handleMicToggle = () => {
-            if (localMicrophoneTrack) {
-                localMicrophoneTrack.setEnabled(!micOn);
-                setMicOn(!micOn);
-            }
-        };
+      client.on("user-published", async (user, mediaType) => {
+        await client.subscribe(user, mediaType);
+        if (mediaType === "video" && user.videoTrack) {
+          setRemoteUsers(us => [...us, user]);
+        }
+        if (mediaType === "audio" && user.audioTrack) {
+          user.audioTrack.play();
+        }
+      });
 
-        const handleCameraToggle = () => {
-            if (localCameraTrack) {
-                localCameraTrack.setEnabled(!cameraOn);
-                setCameraOn(!cameraOn);
-            }
-        };
+      client.on("user-unpublished", user => {
+        setRemoteUsers(us => us.filter(u => u.uid !== user.uid));
+      });
 
-        const handleHangup = () => {
-            if (client.current) {
-                client.current.leave();
-                setIsConnected(false);
-                setCalling(false);
-                setRemoteUsers([]);
-                localMicrophoneTrack && localMicrophoneTrack.close();
-                localCameraTrack && localCameraTrack.close();
-                setLocalMicrophoneTrack(null);
-                setLocalCameraTrack(null);
-            }
-        };
+      return () => client.leave();
+    }, []);
 
-        const joinCall = (data) => {
-            return new Promise((resolve, reject) => {
-                setCalling(true);
-                client.current = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+    const createLocalTracks = async () => {
+      const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks();
+      setLocalMicTrack(mic);
+      setLocalCamTrack(cam);
+      mic.play("local-microphone");
+      cam.play("local-camera");
+      clientRef.current.publish([mic, cam]);
+    };
 
-                client.current.on("user-published", async (user, mediaType) => {
-                    await client.current.subscribe(user, mediaType);
-                    if (mediaType === "video") {
-                        setRemoteUsers((prevUsers) => [...prevUsers, user]);
-                    }
-                    if (mediaType === "audio") {
-                        user.audioTrack.play();
-                    }
-                });
+    const joinCall = async () => {
+      try {
+        await clientRef.current.join(appId, channel, token || null);
+        setIsConnected(true);
+        await createLocalTracks();
+      } catch {
+        const res = await fetch("/create-channel/", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+          body: JSON.stringify({ channelName: channel, uid: 0 }),
+          credentials: "include"
+        });
+        const data = await res.json();
+        await clientRef.current.join(appId, data.channel_name, data.token);
+        setIsConnected(true);
+        await createLocalTracks();
+      }
+    };
 
-                client.current.on("user-unpublished", (user) => {
-                    setRemoteUsers((prevUsers) => prevUsers.filter((u) => u.uid !== user.uid));
-                });
+    const toggleMic = () => {
+      if (localMicTrack) {
+        localMicTrack.setEnabled(!micOn);
+        setMicOn(!micOn);
+      }
+    };
 
-                client.current
-                    .join(appId, data.channel_name, data.token || null)
-                    .then(() => {
-                        setIsConnected(true);
-                        createLocalTracks();
-                        resolve();
-                    })
-                    .catch((error) => {
-                        console.error("Join failed", error);
-                        reject(error);
-                    });
-            });
-        };
+    const toggleCam = () => {
+      if (localCamTrack) {
+        localCamTrack.setEnabled(!camOn);
+        setCamOn(!camOn);
+      }
+    };
 
-        const handleJoinOrCreate = async () => {
-            try {
-                const data = { appId, channel_name: channel, token };
-                await joinCall(data);
-            } catch (joinErr) {
-                try {
-                    const res = await fetch('/create-channel/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': csrftoken,
-                        },
-                        body: JSON.stringify({ channelName: channel, uid: 0 }),
-                        credentials: 'include'
-                    });
-                    const data = await res.json();
-                    await joinCall(data);
-                } catch (createErr) {
-                    console.error("Failed to create meeting after join failure", createErr);
-                }
-            }
-        };
+    const hangup = () => {
+      clientRef.current.leave();
+      setIsConnected(false);
+      setRemoteUsers([]);
+      localMicTrack?.close();
+      localCamTrack?.close();
+      setLocalMicTrack(null);
+      setLocalCamTrack(null);
+    };
 
-        // ✅ RENDER to main-component when connected
-        React.useEffect(() => {
-            if (isConnected) {
-                const container = document.getElementById("main-component");
-                if (container) {
-                    container.innerHTML = "";
-                    ReactDOM.render(
-                       <Main
-                            localMic={localMicrophoneTrack}
-                            localCam={localCameraTrack}
-                            remoteUsers={remoteUsers}
-                            
-                            />,
-                        container
-                    );
-                }
-            }
-            return () => {
-                console.log("Cleaning up client");
-              client.current && client.current.leave();
-            };
-        }, [isConnected]);
+    return (
+      <>
+        <button onClick={joinCall} disabled={isConnected}>
+          {isConnected ? "Connected" : "Join"}
+        </button>
+        {isConnected && (<Portal selector="#main-component">
+            <Main
+            localMic={localMicTrack}
+            localCam={localCamTrack}
+            remoteUsers={remoteUsers}
+            onMicToggle={toggleMic}
+            onCamToggle={toggleCam}
+            onHangup={hangup}
+            />
+        </Portal>
+        //   document.getElementById("main-component")
+        )}
+      </>
+    );
+  }
 
-        return (
-            <div className="join-room">
-                <button onClick={handleJoinOrCreate}>Join</button>
-            </div>
-        );
-    }
+  document.querySelectorAll(".join-class-button").forEach(el => {
+    const props = {
+      appId: el.dataset.appId,
+      channel: el.dataset.channel,
+      token: el.dataset.token,
+    };
+    createRoot(el).render(<CreateClass {...props} />);
+  });
 
-    document.querySelectorAll('.join-class-button').forEach((el) => {
-        const appId = el.dataset.appId;
-        const channel = el.dataset.channel;
-        const token = el.dataset.token;
+  const Portal = ({ children, selector }) => {
+  const hasCleared = React.useRef(false);
+  const target = document.querySelector(selector);
+  if (!target) return null;
 
-        ReactDOM.render(
-            <CreateClass appId={appId} channel={channel} token={token} />,
-            el
-        );
-    });
+  if (!hasCleared.current) {
+    target.innerHTML = "";
+    hasCleared.current = true;
+  }
+
+  return createPortal(children, target);
+};
