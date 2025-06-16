@@ -39,5 +39,6 @@ class Classrooms(models.Model):
             "subject": self.subject,
             "description": self.description,
             "members_count": members_count,
-            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p")
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+            "image_url": self.thumbnail.url if self.thumbnail else None
         }
