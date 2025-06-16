@@ -516,3 +516,23 @@
 834:M 16 Jun 2025 02:45:59.879 * Done loading RDB, keys loaded: 2, keys expired: 0.
 834:M 16 Jun 2025 02:45:59.880 * DB loaded from disk: 0.012 seconds
 834:M 16 Jun 2025 02:45:59.880 * Ready to accept connections
+834:M 16 Jun 2025 04:54:48.622 * 1 changes in 3600 seconds. Saving...
+834:M 16 Jun 2025 04:54:48.631 * Background saving started by pid 1470
+1470:C 16 Jun 2025 04:54:48.651 * DB saved on disk
+1470:C 16 Jun 2025 04:54:48.652 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+834:M 16 Jun 2025 04:54:48.737 * Background saving terminated with success
+834:M 16 Jun 2025 05:54:49.034 * 1 changes in 3600 seconds. Saving...
+834:M 16 Jun 2025 05:54:49.051 * Background saving started by pid 1519
+1519:C 16 Jun 2025 05:54:49.083 * DB saved on disk
+1519:C 16 Jun 2025 05:54:49.084 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+834:M 16 Jun 2025 05:54:49.164 * Background saving terminated with success
+834:M 16 Jun 2025 07:08:31.846 * 1 changes in 3600 seconds. Saving...
+834:M 16 Jun 2025 07:08:31.850 * Background saving started by pid 1670
+1670:C 16 Jun 2025 07:08:31.864 * DB saved on disk
+1670:C 16 Jun 2025 07:08:31.864 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+834:M 16 Jun 2025 07:08:31.955 * Background saving terminated with success
+834:signal-handler (1750057778) Received SIGINT scheduling shutdown...
+834:M 16 Jun 2025 07:09:38.467 # User requested shutdown...
+834:M 16 Jun 2025 07:09:38.468 * Saving the final RDB snapshot before exiting.
+834:M 16 Jun 2025 07:09:38.484 * DB saved on disk
+834:M 16 Jun 2025 07:09:38.486 # Redis is now ready to exit, bye bye...
