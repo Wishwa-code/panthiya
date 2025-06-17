@@ -8,6 +8,8 @@
                     <div class="class-grid-title">
                         <h2>My classes</h2>
                     </div>
+                    
+                    
                     <div class="class-grid">
                         {% for classroom in page_obj %}
                         {# Each "contact" is a Contact model object. #}
@@ -15,22 +17,34 @@
                                 <div id="index_post_photo">
                                     <img id="post-post-image" height="20" src="{{classroom.image_url}}" alt="{{post.image}}">    
                                 </div>
+
+                                
+                                
+                                <!-- <button class="class_details_edit_button" data-post-id="{{classroom.id}}"> Edit </button> -->
                                 <div id="index_classroom_item">
-                                    <div id="first-div-inside-classroom">
-                                        <p><b>{{classroom.name}}</b></p>
+                                    <div class="first-div-inside-classroom-card">
+                                        <div class="classroom-title-inside-card" id="{{classroom.id}}">
+                                            {{classroom.name}}
+                                        </div>
+                                        
+                                        {% if request.user == classroom.instructor %}
+                                            <button class="class_edit_button" data-classroom-id="{{classroom.id}}"> 
+                                                <i class='fa-duotone fa-solid fa-pen' data-state="edit"></i>    
+                                            </button>
+                                        {% endif %}
                                     </div>
 
-                                    <div class="second-div-inside-post">
+                                    <div class="second-div-inside-classroom-card">
                                         <div class="lefftside-container-in-second-div">
                                              <div class="tag-card">{{classroom.instructor}}</div>
-                                            <div class="tag-card" id="post-timestamp">{{classroom.subject}}</div>
-                                            <div class="tag-card classroom-id">{{classroom.grade}}</div>
+                                            <div class="tag-card" id="{{classroom.id}}-subject">{{classroom.subject}}</div>
+                                            <div class="tag-card classroom-id" id="{{classroom.id}}-grade">{{classroom.grade}}</div>
                                         </div>
                                         
                                         <div class="join-class-button" 
                                             data-app-id="95c3c83fa4a34edc8ed24e22eed1bd82"
-                                            data-channel="mock_channel"
-                                            data-token="007eJxTYEjy/coTIx9YOuf+KZPK8gklrxxZTr56UPdKctNjzY/Nl2YqMFiaJhsnWxinJZokGpukpiRbpKYYmaQaGaWmphgmpVgYzbkVkCHAx8AgofeVlZGBkYEFiEF8JjDJDCZZwCQPQ25+cnZ8ckZiXl5qDgMDAAtlJAE="
+                                            data-channel="{{classroom.name}}"
+                                            data-token="{{classroom.token}}"
                                             id="join-class-btn-{{ forloop.counter }}">
                                         </div>
                                     </div>
@@ -72,6 +86,8 @@
         <script type="text/babel" src="{% static 'videochat/joinClass.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/conference.js' %}"></script>
         <script type="text/babel" src="{% static 'videochat/class_app.js' %}"></script>
+        <script src="{% static 'videochat/class_edit_button.js' %}"></script>
+
 {% endblock %}
 
 

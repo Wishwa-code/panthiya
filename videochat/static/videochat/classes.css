@@ -96,7 +96,14 @@
   height:310px;
 }
 
-.second-div-inside-post{
+.first-div-inside-classroom-card{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
+.second-div-inside-classroom-card{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -135,7 +142,7 @@
   /* border: 1px solid #ccc; */
 }
 
-.join-class-button{
+.button-inside-join-card{
   background-color: #E8B824; /* YouTube red */
   color: white;
   border: none;
@@ -149,12 +156,12 @@
   
 }
 
-.join-class-button:hover {
+.button-inside-join-card:hover {
   background-color: #E8B824;
   transform: scale(1.05);
 }
 
-.join-class-button:active {
+.button-inside-join-card:active {
   transform: scale(0.95);
 }
 
@@ -163,8 +170,34 @@
     margin-right: 10px;
 }
 
+.class_edit_button {
+   /* border-radius:10px; */
+    width:50px;
+    height: 20px;
+    padding-left: 7px;
+    color:#E8B824;
+    /* background-color:  #1DA1F2 ; */
+    /* box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);  */
+    /* border:none;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal; */
+    font-size: 17px;
+    padding-bottom: 44px;
+}
 
+.classroom-title-inside-card{
+  height:20px;
+  padding-bottom: 40px;
+}
 
+.edit-class-subject-input{
+  width: 150px;
+}
+
+.edit-class-other-input{
+  width: 80px;
+}
 
 
 /* !------------- User List Styles (connected users videos when in classroom-------------! */
@@ -270,7 +303,7 @@ samp{
     align-items: center;
     gap: 10px; /* Space between buttons */
     padding: 10px; /* Padding around the buttons */
-    margin-top: 100px;
+    margin-top: 50px;
     background-color: lab(8.77% -1.4 -6.83 / 0.692); /* Transparent green */
     border-radius: 15px;
 }

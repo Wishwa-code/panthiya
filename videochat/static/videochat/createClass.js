@@ -73,6 +73,7 @@ const { useState, useEffect, useRef } = React;
     const [localMicTrack, setLocalMicTrack] = useState(null);
     const [localCamTrack, setLocalCamTrack] = useState(null);
     const [remoteUsers, setRemoteUsers] = useState([]);
+    const [isJoining, setIsJoining] = useState(false);
     const clientRef = useRef(null);
     const csrftoken = getCookie('csrftoken');
 
@@ -118,6 +119,7 @@ const { useState, useEffect, useRef } = React;
     };
 
     const joinCall = async () => {
+      setIsJoining(true);
       try {
         await clientRef.current.join(appId, channel, token || null);
         setIsConnected(true);
@@ -132,6 +134,8 @@ const { useState, useEffect, useRef } = React;
         const data = await res.json();
         await clientRef.current.join(appId, data.channel_name, data.token);
         setIsConnected(true);
+        setIsJoining(false);
+
         await createLocalTracks();
       }
     };
@@ -167,8 +171,8 @@ const { useState, useEffect, useRef } = React;
 
     return (
       <>
-        <button onClick={joinCall} disabled={isConnected}>
-          {isConnected ? "Connected" : "Join"}
+        <button class="button-inside-join-card" onClick={joinCall} disabled={isConnected}>
+          {isJoining ? "Connecting" : "Join"}
         </button>
         {isConnected && (<Portal selector="#main-component">
             <Main

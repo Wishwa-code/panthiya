@@ -1,4 +1,6 @@
 import os
+
+import json
 from django.shortcuts import render
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -22,8 +24,10 @@ from django.core.paginator import Paginator
 
 from videochat.authentication import BearerAuthentication
 from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer
-from django.shortcuts import redirect
+from django.shortcuts import redirect,HttpResponseRedirect
+from django.urls import reverse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import requests
 
 import base64
@@ -36,13 +40,50 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('accounts/login')
     
+    
+    
     myData = True
     user_list = User.objects.all()
     classes = Classrooms.objects.filter(members=request.user.id)
     print('classes of requested user',classes)
     all_classes_count = classes.count()
-    class_list = classes.order_by("-timestamp").all()
-    class_list = [classroom.serialize() for classroom in class_list]
+    ordered_class_list = classes.order_by("-timestamp").all()
+    class_list = [classroom.serialize() for classroom in ordered_class_list]
+
+    classroom_lookup = {c.id: c for c in classes}
+
+    uid = request.user.id
+    app_id = '95c3c83fa4a34edc8ed24e22eed1bd82'
+    app_certificate = '21bf9ec600454bd7954551057fa5581f'
+    token_expiration_in_seconds = 3600
+    privilege_expiration_in_seconds = 3600
+
+    if not app_id or not app_certificate:
+        print("Need to set environment variable AGORA_APP_ID and AGORA_APP_CERTIFICATE")
+        return
+    
+    for classroom_data in class_list:
+        cid = classroom_data.get('id')
+        print('instructor name', classroom_data.get('instructor'))
+        classroom_obj = classroom_lookup.get(cid)
+        if not classroom_obj:
+            classroom_data['token'] = None
+            continue
+
+        channel_name = classroom_obj.name
+        try:
+            token = RtcTokenBuilder.build_token_with_uid(
+                app_id, app_certificate,
+                channel_name, uid, Role_Publisher,
+                token_expiration_in_seconds,
+                privilege_expiration_in_seconds
+            )
+        except Exception as e:
+            print(f"Error generating token for classroom {channel_name}: {e}")
+            token = None
+
+        classroom_data['token'] = token
+
     paginator = Paginator(class_list, 10)
 
     page_number= request.GET.get('page')
@@ -53,13 +94,45 @@ def index(request):
 
     profile = Profile.objects.get(user=request.user.id)
     print("freinds:", user_list, "Profile:",profile)
-    
+
     return render (request, 'videochat/classes.html',{
         'myData': myData,
         'user_list': user_list,
         'profile': profile,
         'page_obj': page_obj,
+        # 'token_list': token_list,
     })
+
+@csrf_exempt  
+def edit_classroom(request, classroom_id):
+    if request.method == 'PUT': 
+        try:
+            classroom = Classrooms.objects.get(pk=classroom_id)
+            print('received request to edit',  classroom.name)
+            
+        except Classrooms.DoesNotExist:
+            return JsonResponse({"error": "Classroom not found."}, status=404)
+        
+        print(classroom_id, classroom.name, request.user)
+        if classroom.instructor == request.user:
+            data = json.loads(request.body)
+            if data.get("classroom_name") is not None:
+                classroom.name = data["classroom_name"]
+            if data.get("updated_subject") is not None:
+                classroom.subject = data["updated_subject"]
+            if data.get("updated_grade") is not None:
+                classroom.grade = data["updated_grade"]
+            classroom.save()
+            return JsonResponse({'success': True}, status=200)
+        else:
+            return JsonResponse({"error": "Restrcited attempt to edit other users classroom data has been noticed."}, status=404)
+        
+
+    # must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "Invalid Request Type."
+        }, status=400)
 
 def chats(request):
     if not request.user.is_authenticated:
@@ -76,6 +149,53 @@ def chats(request):
         'user_list': user_list,
         'profile': profile,
     })
+
+def create_class(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts/login')
+    
+    if request.method == 'POST':
+        class_name = request.POST.get('classname')
+        class_description = request.POST.get('description')
+        class_grade = request.POST.get('grade')
+        class_subject = request.POST.get('subject')
+        
+        if not class_name:
+            return JsonResponse({'error': 'Class name is required'}, status=400)
+        try:
+            classroom = Classrooms.objects.create(name=class_name, description = class_description, grade=class_grade, subject=class_subject)
+
+            thumbnail = request.FILES.get('thumbnail')
+
+            print('thumbnail',thumbnail)
+            
+            try:
+                if thumbnail:
+                    classroom.thumbnail = thumbnail
+                    classroom.save()
+
+            except Exception as e:
+                return render(request, "videochat/create_class.html", {
+                    "message": e
+                })
+
+        except Exception as e:
+            return render(request, "videochat/create_class.html", {
+                "message": e
+            })
+
+            
+        classroom.instructor = request.user
+        classroom.members.add(request.user)
+        classroom.save()
+
+
+        print("register successful")
+
+        return HttpResponseRedirect(reverse("index"))
+
+    else: 
+        return render(request, 'videochat/create_class.html',)
     
 
 class MessageView(CreateAPIView):
@@ -209,4 +329,4 @@ class CreateChannelView(APIView):
             #print(response.json())  
         #else:  
             #print(f'Error: {response.status_code}')  
-            #rint(response.text)  
+            #rint(response.text)
