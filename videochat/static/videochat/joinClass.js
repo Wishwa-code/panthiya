@@ -12,7 +12,7 @@ function Joinclass () {
         return(
             <div className="joinclass">
 
-                <h2>Choose an Option</h2>
+                <h2 style={{textAlign: 'start'}}>Choose an Option</h2>
                 <div className="card-container">
                 <div className="card-button" onClick={displayjoin}>
                     <h3>Join Class</h3>

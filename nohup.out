@@ -599,3 +599,20 @@
 610:C 16 Jun 2025 14:31:59.093 * DB saved on disk
 610:C 16 Jun 2025 14:31:59.094 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
 252:M 16 Jun 2025 14:31:59.174 * Background saving terminated with success
+252:signal-handler (1750087607) Received SIGINT scheduling shutdown...
+252:M 16 Jun 2025 15:26:47.100 # User requested shutdown...
+252:M 16 Jun 2025 15:26:47.101 * Saving the final RDB snapshot before exiting.
+252:M 16 Jun 2025 15:26:47.119 * DB saved on disk
+252:M 16 Jun 2025 15:26:47.120 # Redis is now ready to exit, bye bye...
+8:C 17 Jun 2025 01:29:05.556 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+8:C 17 Jun 2025 01:29:05.558 # Redis version=7.0.15, bits=64, commit=00000000, modified=0, pid=8, just started
+8:C 17 Jun 2025 01:29:05.558 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+8:M 17 Jun 2025 01:29:05.559 * monotonic clock: POSIX clock_gettime
+8:M 17 Jun 2025 01:29:05.570 * Running mode=standalone, port=6379.
+8:M 17 Jun 2025 01:29:05.571 # Server initialized
+8:M 17 Jun 2025 01:29:05.585 * Loading RDB produced by version 7.0.15
+8:M 17 Jun 2025 01:29:05.586 * RDB age 36138 seconds
+8:M 17 Jun 2025 01:29:05.586 * RDB memory usage when created 1.10 Mb
+8:M 17 Jun 2025 01:29:05.587 * Done loading RDB, keys loaded: 1, keys expired: 0.
+8:M 17 Jun 2025 01:29:05.588 * DB loaded from disk: 0.012 seconds
+8:M 17 Jun 2025 01:29:05.588 * Ready to accept connections

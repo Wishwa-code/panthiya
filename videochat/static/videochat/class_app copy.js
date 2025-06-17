@@ -5,7 +5,7 @@ function getCookie(name) {
 }
 
 
-ReactDOM.render(<App />, document.querySelector("#create-class-cards"));
+ReactDOM.render(<App />, document.querySelector("#create-class-button"));
 
 function App (){
 
@@ -62,7 +62,7 @@ function App (){
   return (
     
     <>
-      {/* <ToggleButton /> */}
+      <ToggleButton />
       {/* <hr id="my-hairline"></hr> */}
       {console.log("initial data loaded inside html",initialData)}
       <Joinclass/>

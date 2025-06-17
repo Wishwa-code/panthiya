@@ -18,7 +18,7 @@ const { useState, useEffect, useRef } = React;
         </div>
         {remoteUsers.map(u => (
           <div className="user" key={u.uid}>
-            <video ref={el => el && u.videoTrack && u.videoTrack.play(el)} />
+            <video class='remote-camera' ref={el => el && u.videoTrack && u.videoTrack.play(el)} />
             <samp>{u.uid}</samp>
           </div>
         ))}
@@ -29,8 +29,10 @@ const { useState, useEffect, useRef } = React;
   function Devicetools({ onMicToggle, onCamToggle, onHangup, remoteUsers, micOn, cameraOn, calling }) {
     return (
       <div className="device-tools">
-        <button onClick={onMicToggle} className="icon-button">
-            {micOn ?
+        <div></div>
+        <div id="device-tools-buttons-container">
+          <button onClick={onMicToggle} className="icon-button">
+            {!micOn ?
                 <i className={`fa-duotone fa-solid fa-microphone-slash `} /> 
                 : <i className={`fa-duotone fa-solid fa-microphone `} /> 
         } 
@@ -47,7 +49,10 @@ const { useState, useEffect, useRef } = React;
                 : <i className={`fa-duotone fa-solid fa-phone `} /> 
         } 
         </button>
-        <p>Participants: {1 + remoteUsers.length}</p>
+        </div>
+        <div id="participant-count">Participants: {1 + remoteUsers.length}</div>
+        
+        
       </div>
     );
   }
@@ -63,7 +68,7 @@ const { useState, useEffect, useRef } = React;
 
   function CreateClass({ appId, channel, token }) {
     const [isConnected, setIsConnected] = useState(false);
-    const [micOn, setMicOn] = useState(true);
+    const [micOn, setMicOn] = useState(false);
     const [camOn, setCamOn] = useState(true);
     const [localMicTrack, setLocalMicTrack] = useState(null);
     const [localCamTrack, setLocalCamTrack] = useState(null);
@@ -133,9 +138,11 @@ const { useState, useEffect, useRef } = React;
 
     const toggleMic = () => {
       if (localMicTrack) {
+        console.log('found local mic track', localMicTrack);
         localMicTrack.setMuted(!micOn);
         setMicOn(!micOn);
       }
+      console.log('didnt found local mic track')
     };
 
     const toggleCam = () => {
@@ -153,6 +160,9 @@ const { useState, useEffect, useRef } = React;
       localCamTrack?.close();
       setLocalMicTrack(null);
       setLocalCamTrack(null);
+
+      // Programmatically navigate to another page
+      window.location.href = '/';
     };
 
     return (

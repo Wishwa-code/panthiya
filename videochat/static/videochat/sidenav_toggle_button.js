@@ -1,6 +1,8 @@
+ReactDOM.render(<ToggleButton />, document.querySelector("#create-class-button"));
+
 function ToggleButton ({}){
     
-    const csrftoken = getCookie('csrftoken');
+    // const csrftoken = getCookie('csrftoken');
     const [isVisible, setIsVisible] = React.useState(false);
     const toggle = () => setIsVisible(v => !v);
 
