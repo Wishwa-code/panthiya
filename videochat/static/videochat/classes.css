@@ -101,6 +101,7 @@
   flex-direction: row;
   justify-content: start;
   align-items: center;
+  height:40px;
 }
 
 .second-div-inside-classroom-card{
@@ -171,32 +172,31 @@
 }
 
 .class_edit_button {
-   /* border-radius:10px; */
-    width:50px;
-    height: 20px;
-    padding-left: 7px;
+    width:40px;
     color:#E8B824;
-    /* background-color:  #1DA1F2 ; */
-    /* box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);  */
-    /* border:none;
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-style: normal; */
+    text-align:center;
     font-size: 17px;
-    padding-bottom: 44px;
-}
 
-.classroom-title-inside-card{
-  height:20px;
-  padding-bottom: 40px;
 }
 
 .edit-class-subject-input{
   width: 150px;
+  border-radius: 15px;
+  padding-right:10px;
+    padding-left:10px;
 }
 
 .edit-class-other-input{
-  width: 80px;
+  width: 100px;
+  margin-right:10px;
+  border-radius: 15px;
+    padding-right:10px;
+    padding-left:10px;
+
+}
+
+.edit-classroom-image-input {
+  margin-top: -24px;
 }
 
 

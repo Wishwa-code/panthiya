@@ -103,36 +103,69 @@ def index(request):
         # 'token_list': token_list,
     })
 
-@csrf_exempt  
+@csrf_exempt
 def edit_classroom(request, classroom_id):
-    if request.method == 'PUT': 
+    # Handle _method override for PUT via POST
+    if request.method == 'POST' and request.POST.get('_method') == 'PUT':
         try:
             classroom = Classrooms.objects.get(pk=classroom_id)
-            print('received request to edit',  classroom.name)
-            
         except Classrooms.DoesNotExist:
             return JsonResponse({"error": "Classroom not found."}, status=404)
+
+        if classroom.instructor != request.user:
+            return JsonResponse({
+                "error": "Unauthorized edit attempt."
+            }, status=403)
+
+        name = request.POST.get('classroom_name')
+        subject = request.POST.get('updated_subject')
+        grade = request.POST.get('updated_grade')
+        image = request.FILES.get('image')
+
+        if name:
+            classroom.name = name
+        if subject:
+            classroom.subject = subject
+        if grade:
+            classroom.grade = grade
+        if image:
+            classroom.thumbnail = image  # Only works if this is an ImageField or FileField
+
+        classroom.save()
+        return JsonResponse({'success': True})
+
+    return JsonResponse({"error": "Invalid Request Type."}, status=400)
+
+# @csrf_exempt  
+# def edit_classroom(request, classroom_id):
+#     if request.method == 'PUT': 
+#         try:
+#             classroom = Classrooms.objects.get(pk=classroom_id)
+#             print('received request to edit',  classroom.name)
+            
+#         except Classrooms.DoesNotExist:
+#             return JsonResponse({"error": "Classroom not found."}, status=404)
         
-        print(classroom_id, classroom.name, request.user)
-        if classroom.instructor == request.user:
-            data = json.loads(request.body)
-            if data.get("classroom_name") is not None:
-                classroom.name = data["classroom_name"]
-            if data.get("updated_subject") is not None:
-                classroom.subject = data["updated_subject"]
-            if data.get("updated_grade") is not None:
-                classroom.grade = data["updated_grade"]
-            classroom.save()
-            return JsonResponse({'success': True}, status=200)
-        else:
-            return JsonResponse({"error": "Restrcited attempt to edit other users classroom data has been noticed."}, status=404)
+#         print(classroom_id, classroom.name, request.user)
+#         if classroom.instructor == request.user:
+#             data = json.loads(request.body)
+#             if data.get("classroom_name") is not None:
+#                 classroom.name = data["classroom_name"]
+#             if data.get("updated_subject") is not None:
+#                 classroom.subject = data["updated_subject"]
+#             if data.get("updated_grade") is not None:
+#                 classroom.grade = data["updated_grade"]
+#             classroom.save()
+#             return JsonResponse({'success': True}, status=200)
+#         else:
+#             return JsonResponse({"error": "Restrcited attempt to edit other users classroom data has been noticed."}, status=404)
         
 
-    # must be via GET or PUT
-    else:
-        return JsonResponse({
-            "error": "Invalid Request Type."
-        }, status=400)
+#     # must be via GET or PUT
+#     else:
+#         return JsonResponse({
+#             "error": "Invalid Request Type."
+#         }, status=400)
 
 def chats(request):
     if not request.user.is_authenticated:

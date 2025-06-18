@@ -15,11 +15,16 @@
                         {# Each "contact" is a Contact model object. #}
                             <div id="index_classroom_wrapper">
                                 <div id="index_post_photo">
-                                    <img id="post-post-image" height="20" src="{{classroom.image_url}}" alt="{{post.image}}">    
+                                    <img id="classroom-image-{{classroom.id}}" height="20" src="{{classroom.image_url}}" alt="{{post.image}}">  
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        class="edit-classroom-image-input" 
+                                        id="classroom-image-input-{{classroom.id}}" 
+                                        style="display: none;"
+                                    >  
                                 </div>
 
-                                
-                                
                                 <!-- <button class="class_details_edit_button" data-post-id="{{classroom.id}}"> Edit </button> -->
                                 <div id="index_classroom_item">
                                     <div class="first-div-inside-classroom-card">
@@ -29,7 +34,7 @@
                                         
                                         {% if request.user == classroom.instructor %}
                                             <button class="class_edit_button" data-classroom-id="{{classroom.id}}"> 
-                                                <i class='fa-duotone fa-solid fa-pen' data-state="edit"></i>    
+                                                <i class='fa-duotone fa-solid fa-pen class-edit-button-icon' data-state="edit"></i>    
                                             </button>
                                         {% endif %}
                                     </div>
