@@ -136,37 +136,6 @@ def edit_classroom(request, classroom_id):
 
     return JsonResponse({"error": "Invalid Request Type."}, status=400)
 
-# @csrf_exempt  
-# def edit_classroom(request, classroom_id):
-#     if request.method == 'PUT': 
-#         try:
-#             classroom = Classrooms.objects.get(pk=classroom_id)
-#             print('received request to edit',  classroom.name)
-            
-#         except Classrooms.DoesNotExist:
-#             return JsonResponse({"error": "Classroom not found."}, status=404)
-        
-#         print(classroom_id, classroom.name, request.user)
-#         if classroom.instructor == request.user:
-#             data = json.loads(request.body)
-#             if data.get("classroom_name") is not None:
-#                 classroom.name = data["classroom_name"]
-#             if data.get("updated_subject") is not None:
-#                 classroom.subject = data["updated_subject"]
-#             if data.get("updated_grade") is not None:
-#                 classroom.grade = data["updated_grade"]
-#             classroom.save()
-#             return JsonResponse({'success': True}, status=200)
-#         else:
-#             return JsonResponse({"error": "Restrcited attempt to edit other users classroom data has been noticed."}, status=404)
-        
-
-#     # must be via GET or PUT
-#     else:
-#         return JsonResponse({
-#             "error": "Invalid Request Type."
-#         }, status=400)
-
 def chats(request):
     if not request.user.is_authenticated:
         return redirect('accounts/login')
