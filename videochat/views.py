@@ -136,25 +136,53 @@ def edit_classroom(request, classroom_id):
 
     return JsonResponse({"error": "Invalid Request Type."}, status=400)
 
-def chats(request):
+def available_classes(request):
     if not request.user.is_authenticated:
         return redirect('accounts/login')
     
-    myData = True
-    user_list = User.objects.all()
-    
+
+    # Get classes where user is NOT a member
+    classes = Classrooms.objects.exclude(members=request.user.id).order_by("-timestamp")
+    class_list = [classroom.serialize() for classroom in classes]
+
+    paginator = Paginator(class_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     profile = Profile.objects.get(user=request.user.id)
-    print("freinds:", user_list, "Profile:",profile)
-    
-    return render (request, 'videochat/chats.html',{
-        'myData': myData,
+    user_list = User.objects.all()
+
+    return render(request, 'videochat/available_classes.html', {
+        'myData': False,
         'user_list': user_list,
         'profile': profile,
+        'page_obj': page_obj,
     })
+
+@csrf_exempt
+def enroll_classroom(request, classroom_id):
+    if request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        try:
+            classroom = Classrooms.objects.get(pk=classroom_id)
+        except Classrooms.DoesNotExist:
+            return JsonResponse({"error": "Classroom not found"}, status=404)
+
+        classroom.members.add(request.user)
+        classroom.save()
+        return JsonResponse({'success': True, 'message': 'Enrolled successfully'})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
 
 def create_class(request):
     if not request.user.is_authenticated:
         return redirect('accounts/login')
+    
+    profile = Profile.objects.get(user=request.user.id)
     
     if request.method == 'POST':
         class_name = request.POST.get('classname')
@@ -190,6 +218,8 @@ def create_class(request):
         classroom.instructor = request.user
         classroom.members.add(request.user)
         classroom.save()
+        
+
 
 
         print("register successful")
@@ -197,8 +227,25 @@ def create_class(request):
         return HttpResponseRedirect(reverse("index"))
 
     else: 
-        return render(request, 'videochat/create_class.html',)
+        return render(request, 'videochat/create_class.html',{
+            'profile': profile,
+        })
     
+def chats(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts/login')
+    
+    myData = True
+    user_list = User.objects.all()
+    
+    profile = Profile.objects.get(user=request.user.id)
+    print("freinds:", user_list, "Profile:",profile)
+    
+    return render (request, 'videochat/chats.html',{
+        'myData': myData,
+        'user_list': user_list,
+        'profile': profile,
+    })
 
 class MessageView(CreateAPIView):
     serializer_class = MessageSerializer

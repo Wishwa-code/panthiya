@@ -12,4 +12,6 @@ urlpatterns = [
     path('create-channel/', CreateChannelView.as_view(), name='create-channel'),
     path('create-class/', views.create_class, name='createClass'),
     path("editClassroom/<int:classroom_id>", views.edit_classroom, name="edit_post"),
+    path('available/', views.available_classes, name='available_classes'),
+    path('enroll/<int:classroom_id>/', views.enroll_classroom, name='enroll_classroom'),
 ]

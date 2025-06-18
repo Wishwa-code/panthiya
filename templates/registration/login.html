@@ -27,32 +27,40 @@
 </p>
 {% endif %}
 
-<form action="{% url 'accounts:login' %}" method="post" id="login-form">{% csrf_token %}
-  <div class="form-row">
-    {{ form.username.errors }}
-    {{ form.username.label_tag }} {{ form.username }}
-  </div>
-  <div class="form-row">
-    {{ form.password.errors }}
-    {{ form.password.label_tag }} {{ form.password }}
-    <input type="hidden" name="next" value="{{ next }}">
-  </div>
-  {% url 'accounts:password_reset' as password_reset_url %}
-  {% if password_reset_url %}
-  <div class="password-reset-link">
-    <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username? -->' %}</a>
-  </div>
-  {% endif %}
+<div class="login-container">
+    <!-- Left box for the image -->
+    <div class="left-box"></div>
 
-  
-  <div class="submit-row">
-    <input type="submit" value="{% translate 'Log in' %}">
-  </div>
-  <br>
-  <div class="signup-link">
-      <a href="{% url 'signup' %}">{% translate "Don't have an account? Register" %}</a>
-  </div>
-</form>
+    <!-- Right box for the login form -->
+    <div class="right-box">
+        <form class="login-form" action="{% url 'accounts:login' %}" method="post" id="login-form">{% csrf_token %}
+          <div class="form-row">
+            {{ form.username.errors }}
+            {{ form.username.label_tag }} {{ form.username }}
+          </div>
+          <div class="form-row">
+            {{ form.password.errors }}
+            {{ form.password.label_tag }} {{ form.password }}
+            <input type="hidden" name="next" value="{{ next }}">
+          </div>
+          {% url 'accounts:password_reset' as password_reset_url %}
+          {% if password_reset_url %}
+          <div class="password-reset-link">
+            <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username? -->' %}</a>
+          </div>
+          {% endif %}
+
+          
+          <div class="signup-link">
+            <input type="submit" value="{% translate 'Log in' %}">
+          </div>
+          <br>
+          <div class="signup-link">
+              <a href="{% url 'signup' %}">{% translate "Don't have an account? Register" %}</a>
+          </div>
+        </form>
+    </div>
+</div>
 
 </div>
 {% endblock %}

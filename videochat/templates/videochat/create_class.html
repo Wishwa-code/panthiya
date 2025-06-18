@@ -1,12 +1,19 @@
 {% extends "videochat/layout.html" %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'videochat/create_class.css' %}">
+
+{% endblock %}
 
 {% block body %}
-
-    <h2>Create class</h2>
+<div id="create-class-page">
+    <h2 style="text-align: center;">Create class</h2>
 
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}
+    
 
     <form action="{% url 'createClass' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -31,5 +38,5 @@
     </form>
 
     <a href="{% url 'index' %}">Go back</a>
-
+</div>
 {% endblock %}

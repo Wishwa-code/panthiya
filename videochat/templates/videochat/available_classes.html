@@ -1,0 +1,77 @@
+{% extends "videochat/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div id="main-component">
+    <div class="class-grid-container">
+        <div class="class-grid-title">
+            <h2>Available Classes</h2>
+        </div>
+
+        <div class="class-grid">
+            {% for classroom in page_obj %}
+                <div id="index_classroom_wrapper">
+                    <div id="index_post_photo">
+                        <img id="classroom-image-{{classroom.id}}" height="20" src="{{classroom.image_url}}" alt="{{classroom.name}}">
+                    </div>
+
+                    <div id="index_classroom_item">
+                        <div class="first-div-inside-classroom-card">
+                            <div class="classroom-title-inside-card" id="{{classroom.id}}">
+                                {{ classroom.name }}
+                            </div>
+                        </div>
+
+                        <div class="second-div-inside-classroom-card">
+                            <div class="lefftside-container-in-second-div">
+                                <div class="tag-card">{{ classroom.instructor }}</div>
+                                <div class="tag-card" id="{{classroom.id}}-subject">{{ classroom.subject }}</div>
+                                <div class="tag-card classroom-id" id="{{classroom.id}}-grade">{{ classroom.grade }}</div>
+                            </div>
+
+                            <div>
+                                <button class="btn btn-success" onclick="enrollClassroom({{ classroom.id }})">
+                                    Enroll
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No available classes to enroll.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="create-class-cards">
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<link href="{% static 'videochat/classes.css' %}" rel="stylesheet">
+
+<script>
+    function enrollClassroom(classroomId) {
+        fetch(`/enroll/${classroomId}/`, {
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Enrolled successfully!");
+                location.reload();
+            } else {
+                alert(data.error || "Something went wrong!");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Failed to enroll.");
+        });
+    }
+</script>
+{% endblock %}
