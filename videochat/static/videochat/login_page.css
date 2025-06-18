@@ -73,27 +73,41 @@ body, html {
     border-radius: 4px;
 }
 
-/* Style for the login button */
+input[type="submit"] {
+  background-color: #E8B824;
+  color:white;
+}
+
+input[type="submit"]:hover {
+  background-color: #ffffff;
+  color:black;
+}
+
 .login-form button {
     width: 100%;
-    padding: 10px;
-    background: linear-gradient(90deg, #007bff, #0056b3); /* Gradient background */
-    color: white;
+    padding: 0px;
+    background-color: #007bff;
+    color: #E8B824;
     border: none;
-    border-radius: 25px; /* Rounded corners */
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: all 0.3s ease; /* Smooth transition */
 }
 
 .login-form button:hover {
-    background: linear-gradient(90deg, #0056b3, #003f7f); /* Darker gradient on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
-    transform: scale(1.05); /* Slightly larger on hover */
+    background-color: #ffffff;
 }
+#signup-button{
+      background-color: #E8B824;
+      color:white;
+      padding:10px;
+      border: 1px solid #ccc;
 
+
+}
+#signup-button:hover{
+    background-color: #ffffff;
+    color:black;
+}
 .login-container .right-box {
     flex: 1;
     display: flex;

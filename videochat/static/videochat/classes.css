@@ -321,3 +321,13 @@ samp{
 }
 
 
+
+
+.btn-success{
+  color:#ffffff;
+  background-color:#E8B824;
+}
+.btn-success:hover{
+  color:#000000;
+  background-color:#ffffff;
+}

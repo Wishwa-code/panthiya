@@ -33,6 +33,7 @@
 
     <!-- Right box for the login form -->
     <div class="right-box">
+      <h2> <b>පන්තියට සාදරයෙන් පිළිගනිමු!</b></h2>
         <form class="login-form" action="{% url 'accounts:login' %}" method="post" id="login-form">{% csrf_token %}
           <div class="form-row">
             {{ form.username.errors }}
