@@ -7,9 +7,16 @@ function getCookie(name) {
 ReactDOM.render(<ChatComponent/>, document.querySelector("#main-component"));
 
 function ChatComponent ({}) {
-    const [users, setUsers] = React.useState([]);
-    const [selectedUser, setSelectedUser] = React.useState(null);
-    const [view, setView] = React.useState('list');
+    const [users, setUsers] = React.useState([
+        // Pre-populating with dummy data for immediate visual feedback.
+        // Your existing axios call will append the actual users.
+        {id: 1, username: 'Kanon Ahamed', messages: [{text: 'wait a second', sender: 'Kanon Ahamed'}]},
+        {id: 2, username: 'Shakil Khan', messages: [{text: "Hi I'm using dj chat", sender: 'Shakil Khan'}]},
+        {id: 3, username: 'Mamun Sharif', messages: [{text: "Hi I'm using dj chat", sender: 'Mamun Sharif'}]},
+        {id: 4, username: 'Jahid Hassan', messages: [{text: "Hi I'm using dj chat", sender: 'Jahid Hassan'}]},
+    ]);
+    const [selectedUser, setSelectedUser] = React.useState(users[0]); // Initially select the first user
+    const [view, setView] = React.useState('detail');
     const [newMessage, setNewMessage] = React.useState();
     const [remotedata, setRemotedata ] = React.useState();
     const messageConnectionRef = React.useRef(null);
@@ -161,72 +168,92 @@ const handleMessageInput = ()=> {
     console.log(selectedUser, "this is message", newMessage);
     addMessage(); 
 };
+ const currentUserData = users.find(user => user.name === selectedUser.name);
 
-if (view === 'list') {
-    return (
-        <div>
-            <h1>User List</h1>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id} onClick={() => handleUserClick(user)}>
-                        {user.username}
-                    </li>
-                ))}
-            </ul>
+return (
+        <div className="chat-container">
+            {/* Sidebar with User List */}
+            <div className="sidebar">
+                <div className="sidebar-header">
+                    <div className="user-profile">
+                        <img src="https://via.placeholder.com/40" alt="Rifat ul alom" className="avatar" />
+                        <span className="username">Rifat ul alom</span>
+                    </div>
+                </div>
+                <div className="search-bar">
+                    <input type="text" placeholder="Search" />
+                </div>
+                <div className="user-list">
+                    {users.map(user => (
+                        <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.id === user.id ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
+                            <img src="https://via.placeholder.com/40" alt={user.username} className="avatar" />
+                            <div className="user-info">
+                                <span className="username">{user.username}</span>
+                                <span className="last-message">{user.messages.length > 0 ? user.messages[user.messages.length - 1].text : 'No messages'}</span>
+                            </div>
+                            <span className="timestamp">{user.messages.length > 0 ? 'a few seconds ago' : ''}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Main Chat Window */}
+            {selectedUser ? (
+                <div className="chat-window">
+                    <div className="chat-header">
+                        <img src="https://via.placeholder.com/40" alt={selectedUser.username} className="avatar" />
+                        <div className="user-info">
+                            <span className="username">{selectedUser.username}</span>
+                            <span className="status">Offline</span>
+                        </div>
+                        <div className="chat-actions">
+                            <button onClick={() => setView('sender')} className="call-button">
+                                Call
+                            </button>
+                        </div>
+                    </div>
+                    <div className="chat-body" ref={chatBodyRef}>
+                        {/* Dummy messages to show the layout */}
+                        {
+                            // Check the 'view' state to decide what to render inside the chat body
+                            view === 'sender' ? (
+                                // If we are initiating a call, show the SenderView
+                                <Sender selectedUser={selectedUser} setView={setView} />
+                                // <p>hi</p>
+                            ) : view === 'receiver' ? (
+                                // If we are receiving a call, show the ReceiverView
+                                <Receiver remotedata={remotedata} setView={setView} />
+                                // <p></p>
+                            ) : (
+                                // Otherwise (if view is 'detail'), show the messages list
+                               currentUserData.messages.map((message, index) => (
+                                        <div
+                                            key={index}
+                                            className={`message-container ${message.sender === window.__INITIAL_DATA__?.username ? 'sent' : 'received'}`}
+                                        >
+                                            <div className="message">{message.text}</div>
+                                            <div className="timestamp">{dateHumanize(message.date_time)}</div>
+                                        </div>
+                                    ))
+                            )
+                        }
+                    </div>
+                    <div className="chat-input">
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={handleMessageChange}
+                            placeholder="Type a message..."
+                        />
+                         {/* A send button can be added here */}
+                    </div>
+                </div>
+            ) : (
+                <div className="chat-window placeholder">Select a chat to start messaging</div>
+            )}
         </div>
     );
-  }
-
-if (view === 'detail' && selectedUser) {
-    const selectedUserData = users.find(user => user.username === selectedUser.username);
-    return (
-        <div>
-            <ActiveChatTop setView={setView}/>
-            <h1>User Metadata</h1>
-            <p><strong>Username:</strong> {selectedUserData.username}</p>
-            <p><strong>Email:</strong> {selectedUserData.email}</p>
-            
-            <div ref={chatBodyRef} className="chat-body">
-                <ul>
-                {selectedUserData.messages.map(message => (
-                    <li>
-                    <p>{message.text}</p>
-                    <p>{message.sender}</p>
-                    <p>{message.date_time}</p>
-                    </li>
-                ))}
-                </ul>
-            </div>
-            <div>
-                <input
-                    type="text"
-                    value={newMessage}
-                    onChange={handleMessageChange}
-                    placeholder="Enter your message"
-                />
-                <button onClick={handleMessageInput}>Send</button>
-            </div>
-            <button onClick={handleBackClick}>Back to User List</button>
-        </div>
-    );
 }
-if ( view === 'call') {
-    return (
-        <p>view</p>
-    )
-}
-if ( view === 'sender'){
-    return (
-        <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username} />
-    )
-}
-if (view === 'receiver' && remotedata ){
-    return (
-        <Receiver remotedata={remotedata}/>
-    )
-}
-return null;
-};
 
 function ActiveChatTop ({setView}) {
     const handleCall = () => {
