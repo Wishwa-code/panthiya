@@ -5,7 +5,7 @@ function getCookie(name) {
 }
 
 
-ReactDOM.render(<App />, document.querySelector("#main-component"));
+ReactDOM.render(<App />, document.querySelector("#create-class-cards"));
 
 function App (){
 
@@ -62,10 +62,10 @@ function App (){
   return (
     
     <>
-      <ToggleButton />
+      {/* <ToggleButton /> */}
       {/* <hr id="my-hairline"></hr> */}
       {console.log("initial data loaded inside html",initialData)}
-      <ChatComponent currentuser={initialData.username}/>
+      <Joinclass/>
     </>
   )
 }

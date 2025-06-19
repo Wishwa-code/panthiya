@@ -1,47 +1,41 @@
-import os
-
+import base64
+import http.client
 import json
-from django.shortcuts import render
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-from rest_framework import serializers, status
-from django.http import HttpResponse, JsonResponse
+import os
+import requests
 
 from .models import Profile, User, Classrooms
 
-from django.contrib.auth.models import User
-from rest_framework.generics import CreateAPIView
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
-from videochat.serializers import MessageModelSerializer, MessageSerializer
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
-from django.core.paginator import Paginator
-
-from videochat.authentication import BearerAuthentication
-from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer
+from django.shortcuts import render
 from django.shortcuts import redirect,HttpResponseRedirect
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import requests
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
-import base64
-import http.client
+from rest_framework import serializers, status
+from rest_framework import generics
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from src.RtcTokenBuilder2 import *
 
-
+from videochat.authentication import BearerAuthentication
+from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer, MessageSerializer, MessageModelSerializer
 
 def index(request):
     if not request.user.is_authenticated:
         return redirect('accounts/login')
-    
-    
-    
     myData = True
     user_list = User.objects.all()
     classes = Classrooms.objects.filter(members=request.user.id)
@@ -219,13 +213,8 @@ def create_class(request):
         classroom.members.add(request.user)
         classroom.save()
         
-
-
-
         print("register successful")
-
         return HttpResponseRedirect(reverse("index"))
-
     else: 
         return render(request, 'videochat/create_class.html',{
             'profile': profile,
@@ -253,9 +242,7 @@ class MessageView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         
-      
         user = User.objects.get(pk=1)
-       
         return self.create(request, *args, **kwargs)
 # Create your views here.
 
@@ -269,13 +256,10 @@ class UsersView(generics.ListAPIView):
         print(users)
         return users
 
-
-
 class StartCallSerializer(serializers.Serializer):
     receiver = serializers.SlugField()
     sender = serializers.SlugField()
     peer_id = serializers.CharField()
-
 
 class StartCall(APIView):
     print('came here')
@@ -301,10 +285,8 @@ class StartCall(APIView):
             return Response({'hello': 'world'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class JoinCallSerializer(serializers.Serializer):
     peer_js = serializers.CharField()
-
 
 class EndCall(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication, BearerAuthentication]
@@ -324,8 +306,6 @@ class EndCall(APIView):
             )
             return Response({'hello': 'world'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
 
 class CreateChannelView(APIView):
     def post(self, request):

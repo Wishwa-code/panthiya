@@ -1,7 +1,7 @@
-function CreateClass() {
+function Conference() {
         const [calling, setCalling] = React.useState(false);
         const [isConnected, setIsConnected] = React.useState(false);
-        const [appId, setAppId] = React.useState('95c3c83fa4a34edc8ed24e22eed1bd82');
+        const [appId, setAppId] = React.useState("");
         const [channel, setChannel] = React.useState("");
         const [token, setToken] = React.useState("");
         const [micOn, setMicOn] = React.useState(true);
@@ -12,6 +12,39 @@ function CreateClass() {
         const client = React.useRef(null);
 
         const csrftoken = getCookie('csrftoken');
+
+        React.useEffect(() => {
+          if (calling && appId && channel) {
+            // Initialize Agora client
+            client.current = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+            client.current.on("user-published", async (user, mediaType) => {
+              await client.current.subscribe(user, mediaType);
+              if (mediaType === "video") {
+                setRemoteUsers((prevUsers) => [...prevUsers, user]);
+              }
+              if (mediaType === "audio") {
+                user.audioTrack.play();
+              }
+            });
+
+            client.current.on("user-unpublished", (user) => {
+              setRemoteUsers((prevUsers) => prevUsers.filter((u) => u.uid !== user.uid));
+            });
+
+            client.current
+              .join(appId, channel, token || null)
+              .then(() => {
+                setIsConnected(true);
+                createLocalTracks();
+              })
+              .catch((error) => console.error("Failed to join channel", error));
+
+            return () => {
+              client.current && client.current.leave();
+            };
+          }
+        }, [calling, appId, channel, token]);
 
         const createLocalTracks = async () => {
           const [microphoneTrack, cameraTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
@@ -49,63 +82,6 @@ function CreateClass() {
           }
         };
 
-        const createMeeting = () => {
-            fetch('/create-channel/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-                body: JSON.stringify({
-                    channelName: channel, 
-                    uid: 0
-                }),
-                  withCredentials: true
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Token and Channel:', data);
-                setToken(data.token);
-                setChannel(data.channel_name);
-                console.log("pringint app idhere",appId);
-                joinCall(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-
-        const joinCall = (data) => {
-            console.log("data came", data);
-            setCalling(true);
-            client.current = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-
-            client.current.on("user-published", async (user, mediaType) => {
-              await client.current.subscribe(user, mediaType);
-              if (mediaType === "video") {
-                setRemoteUsers((prevUsers) => [...prevUsers, user]);
-              }
-              if (mediaType === "audio") {
-                user.audioTrack.play();
-              }
-            });
-
-            client.current.on("user-unpublished", (user) => {
-              setRemoteUsers((prevUsers) => prevUsers.filter((u) => u.uid !== user.uid));
-            });
-
-            client.current
-              .join(appId, data.channel_name, data.token || null)
-              .then(() => {
-                setIsConnected(true);
-                createLocalTracks();
-              })
-              .catch((error) => console.error("Failed to join channel", error));
-
-            return () => {
-              client.current && client.current.leave();
-            };
-          } 
         
 
         return (
@@ -134,21 +110,29 @@ function CreateClass() {
                 </div>
               ) : (
                 <div className="join-room">
-
+                  <input
+                    onChange={(e) => setAppId(e.target.value)}
+                    placeholder="<Your app ID>"
+                    value={appId}
+                  />
                   <input
                     onChange={(e) => setChannel(e.target.value)}
-                    placeholder="Enter name for the channel"
+                    placeholder="<Your channel Name>"
                     value={channel}
                   />
-
-                  
-
-                  <button 
-                    className=''
-                    onClick={() => createMeeting()}
+                  <input
+                    onChange={(e) => setToken(e.target.value)}
+                    placeholder="<Your token>"
+                    value={token}
+                  />
+                  <button
+                    className={`join-channel ${!appId || !channel ? "disabled" : ""}`}
+                    disabled={!appId || !channel}
+                    onClick={() => setCalling(true)}
                   >
-                    create meeting
+                    Join Channel
                   </button>
+
                 </div>
               )}
             </div>
@@ -168,9 +152,6 @@ function CreateClass() {
                 >
                   {calling ? <i className="i-phone-hangup" /> : <i className="i-mdi-phone" />}
                 </button>
-		<p>app ID:95c3c83fa4a34edc8ed24e22eed1bd82</p><br/>  
-                <p>channel:{channel}</p><br/>
-		<p>token:{token}</p>
               </div>
             )}
           </>
