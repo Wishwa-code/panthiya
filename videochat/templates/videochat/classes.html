@@ -70,9 +70,11 @@
 
 {% endblock %}
 
+{% block style %}
+    <link href="{% static 'videochat/my_classes_page/classes.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block script %}
-        <link href="{% static 'videochat/my_classes_page/classes.css' %}" rel="stylesheet">
         <script>
             //Collecting data that for react accessing
             window.__INITIAL_DATA__={
@@ -84,15 +86,8 @@
             };
         </script>
         <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
-
-
-	    <!-- <script type="text/babel" src="{% static 'videochat/my_classes_page/sidenav_toggle_button.js' %}"></script> -->
         <script type="text/babel" src="{% static 'videochat/my_classes_page/createClass.js' %}"></script>
-        <!-- <script type="text/babel" src="{% static 'videochat/my_classes_page/joinClass.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/my_classes_page/conference.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/my_classes_page/class_app.js' %}"></script> -->
         <script src="{% static 'videochat/my_classes_page/class_edit_button.js' %}"></script>
-
 {% endblock %}
 
 
