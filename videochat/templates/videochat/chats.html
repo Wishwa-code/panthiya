@@ -4,31 +4,31 @@
 
 {% block body %} 
 
-            <div id="main-component">
+    <div id="main-component">
 
-            </div>
+    </div>
 
 
 {% endblock %}
 
 {% block script %}
 
-        <script>
-            //Collecting data that for react accessing
-            window.__INITIAL_DATA__={
-                logged_in:{{ user.is_authenticated|yesno:"true,false" }},
-                username:"{{ request.user.username|escapejs }}", 
-                login_link:"{% url 'accounts:login' %}",
-                logout_link:"{% url 'accounts:logout' %}",
-                profile_image: "{{ profile.photo.url|escapejs }}"
-            };
-        </script>
+    <script>
+        //Collecting data that for react accessing
+        window.__INITIAL_DATA__={
+            logged_in:{{ user.is_authenticated|yesno:"true,false" }},
+            username:"{{ request.user.username|escapejs }}", 
+            login_link:"{% url 'accounts:login' %}",
+            logout_link:"{% url 'accounts:logout' %}",
+            profile_image: "{{ profile.photo.url|escapejs }}"
+        };
+    </script>
 
-	    <script type="text/babel" src="{% static 'videochat/sidenav_toggle_button.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/receiver.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/sender.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/ChatComponent.js' %}"></script>
-        <script type="text/babel" src="{% static 'videochat/chat_app.js' %}"></script>
+    <!-- <script type="text/babel" src="{% static 'videochat/sidenav_toggle_button.js' %}"></script> -->
+    <script type="text/babel" src="{% static 'videochat/chat_page/receiver.js' %}"></script>
+    <script type="text/babel" src="{% static 'videochat/chat_page/sender.js' %}"></script>
+    <script type="text/babel" src="{% static 'videochat/chat_page/ChatComponent.js' %}"></script>
+    <script type="text/babel" src="{% static 'videochat/chat_page/chat_app.js' %}"></script>
 {% endblock %}
 
 
