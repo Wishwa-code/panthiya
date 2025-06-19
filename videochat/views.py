@@ -267,6 +267,7 @@ class StartCall(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
+        print("💬 Incoming request.data:", request.data)
         serializer = StartCallSerializer(data=request.data)
         if serializer.is_valid():
             print(serializer.validated_data['sender'])
@@ -283,6 +284,7 @@ class StartCall(APIView):
             )
             print('all good')
             return Response({'hello': 'world'})
+        print("❗️ Validation failed:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class JoinCallSerializer(serializers.Serializer):

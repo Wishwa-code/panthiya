@@ -218,11 +218,12 @@ return (
                             // Check the 'view' state to decide what to render inside the chat body
                             view === 'sender' ? (
                                 // If we are initiating a call, show the SenderView
-                                <Sender selectedUser={selectedUser} setView={setView} />
+                                console.log("selectedUser", selectedUser),
+                                <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username}  />
                                 // <p>hi</p>
                             ) : view === 'receiver' ? (
                                 // If we are receiving a call, show the ReceiverView
-                                <Receiver remotedata={remotedata} setView={setView} />
+                                <Receiver remotedata={remotedata} />
                                 // <p></p>
                             ) : (
                                 // Otherwise (if view is 'detail'), show the messages list

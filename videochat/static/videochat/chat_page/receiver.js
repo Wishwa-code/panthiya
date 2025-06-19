@@ -110,7 +110,7 @@ function Receiver ({remotedata}) {
 	};
 
 	const initializeWebSocket = (peer_id) => {
-		const newSocket = new WebSocket(`ws/message/${peer_id}/`);
+		const newSocket = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${peer_id}/`);
 		setSocket(newSocket);
 
 		newSocket.onmessage = (event) => {

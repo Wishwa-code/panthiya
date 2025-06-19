@@ -1,4 +1,11 @@
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 function Sender ({selectedUser, currentuser}) {
+    console.log("paremeters received to sender function", selectedUser, currentuser);
     const [displayUser, setDisplayUser] = React.useState({
         username: '',
         name: '',
@@ -154,7 +161,7 @@ function Sender ({selectedUser, currentuser}) {
     };
 
     const initializeWebSocket = (peer_id) => {
-        const newSocket = new WebSocket(`ws/message/${peer_id}/`);
+        const newSocket = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${peer_id}/`);
         setSocket(newSocket);
 
         newSocket.onmessage = (event) => {
