@@ -6,11 +6,12 @@ from django.dispatch import receiver
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    photo = models.ImageField(null=True, blank=True, default='girl.svg',upload_to='images/')
+    photo = models.ImageField(null=True, blank=True, default='profile_pics/default-profile-img.jpg',upload_to='profile_pics/')
     status = models.CharField(default="Hi i'm using dj chat", max_length=255)
     online = models.BooleanField(default=False)
     
-    
+    def __str__(self):
+        return self.user.username
     
 class Message(models.Model):
     text = models.TextField()
@@ -45,12 +46,12 @@ class Classrooms(models.Model):
             "image_url": self.thumbnail.url if self.thumbnail else None
         }
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     if hasattr(instance, 'profile'):
+#         instance.profile.save()

@@ -1,6 +1,6 @@
 function Receiver ({remotedata}) {
-	const [callingStatus, setCallingStatus] = React.useState('calling');
-	const [peer, setPeer] = React.useState(null);
+	const [callingStatus, setCallingStatus] = React.useState('connected');
+	const peerRef = React.useRef(null);
 	const [conn, setConn] = React.useState(null);
 	const [call, setCall] = React.useState(null);
 	const [socket, setSocket] = React.useState(null);
@@ -22,6 +22,8 @@ function Receiver ({remotedata}) {
 		initializePeer(remotedata.data.peer_id);
 		window.addEventListener('beforeunload', handleBeforeUnload);
 
+		
+
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
@@ -33,17 +35,18 @@ function Receiver ({remotedata}) {
 
 	const initializePeer = (remotepeerid_in) => {
 		const newPeer = new Peer();
-		setPeer(newPeer);
+		peerRef.current = newPeer;
 
 		newPeer.on('open', (id) => {
-		console.log('My peer id', id);
+			console.log('My peer id', id);
+			answerCall();
 		});
 
 		newPeer.on('connection', (newConn) => {
-		setConn(newConn);
-		newConn.on('data', (data) => {
-			console.log('Received', data);
-		});
+			setConn(newConn);
+			newConn.on('data', (data) => {
+				console.log('Received', data);
+			});
 		});
 
 		initializeWebSocket(remotepeerid_in);
@@ -65,7 +68,9 @@ function Receiver ({remotedata}) {
 		
 		setCallingStatus('connected');
 		setLocalStream(stream); 
-		const newCall = peer.call(remotedata.data.peer_id, stream);
+		console.log("peer id", remotedata.data.peer_id, stream);
+		
+		const newCall = peerRef.current.call(remotedata.data.peer_id, stream);
 		setCall(newCall);
 		console.log(newCall);
 		newCall.on('stream', streamRemoteCall);
@@ -131,7 +136,32 @@ function Receiver ({remotedata}) {
 
 	return (
 		<div style={{ height: '100vh' }} className="d-flex justify-content-center align-items-center">
-		{callingStatus === 'calling' && (
+
+
+		{callingStatus === 'connected' && (
+			<div>
+			<video ref={localVideoRef} id="localVideo" autoPlay></video>
+			<video ref={remoteVideoRef} id="remoteVideo" autoPlay></video>
+
+			<div className="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10">
+				<button clickCallback={toggleLocalAudio} > audio </button>
+				<button clickCallback={toggleLocalVideo} > video </button> 
+				<button onClick={rejectCall} className="btn btn-lg btn-danger rounded-circle mx-1">
+				<i className="fa-solid fa-phone" style={{ transform: 'rotate(133deg)' }}></i>
+				</button>
+			</div>
+			</div>
+		)}
+
+		{callingStatus === 'rejected' && <h1>Call Rejected, closing the window</h1>}
+		</div>
+	);
+};
+
+
+
+
+		{/* {callingStatus === 'calling' && (
 			<div className="text-center align-self-center">
 			<center>
 				<div className="pulse">
@@ -161,25 +191,4 @@ function Receiver ({remotedata}) {
 				<i className="fa-solid fa-phone" style={{ transform: 'rotate(133deg)' }}></i> Reject
 			</button>
 			</div>
-		)}
-
-		{callingStatus === 'connected' && (
-			<div>
-			<video ref={localVideoRef} id="localVideo" autoPlay></video>
-			<video ref={remoteVideoRef} id="remoteVideo" autoPlay></video>
-
-			<div className="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10">
-				<button clickCallback={toggleLocalAudio} > audio </button>
-				<button clickCallback={toggleLocalVideo} > video </button> 
-				<button onClick={rejectCall} className="btn btn-lg btn-danger rounded-circle mx-1">
-				<i className="fa-solid fa-phone" style={{ transform: 'rotate(133deg)' }}></i>
-				</button>
-			</div>
-			</div>
-		)}
-
-		{callingStatus === 'rejected' && <h1>Call Rejected, closing the window</h1>}
-		</div>
-	);
-};
-
+		)} */}

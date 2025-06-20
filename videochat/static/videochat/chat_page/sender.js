@@ -24,7 +24,7 @@ function Sender ({selectedUser, currentuser}) {
 
 
 
-    console.log("printing here",selectedUser,currentuser);
+    // console.log("printing here",selectedUser,currentuser);
 
     React.useEffect(() => {
         const parsedDisplay = "wishwa";

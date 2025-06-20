@@ -11,7 +11,7 @@
     <!-- Right box for the signup form -->
     <div class="right-box">
         <h2>Sign Up</h2>
-        <form class="login-form" method="post">
+        <form class="login-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" id="signup-button">Sign Up</button>

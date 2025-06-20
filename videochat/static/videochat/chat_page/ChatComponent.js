@@ -4,30 +4,117 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+// NewWindow.js - Create this new file
+
+function NewWindow(props) {
+    const [container, setContainer] = React.useState(null);
+    const newWindow = React.useRef(null);
+
+    React.useEffect(() => {
+        // Open a new window and store a reference to it
+        newWindow.current = window.open('', 'callWindow', 'width=700,height=600');
+
+        // Create a container div in the new window to render into
+        const div = newWindow.current.document.createElement('div');
+        newWindow.current.document.body.appendChild(div);
+        setContainer(div);
+        
+        // Copy all stylesheets from the main page to the new window
+        Array.from(document.styleSheets).forEach(styleSheet => {
+            if (styleSheet.href) {
+                const newLinkEl = newWindow.current.document.createElement('link');
+                newLinkEl.rel = 'stylesheet';
+                newLinkEl.href = styleSheet.href;
+                newWindow.current.document.head.appendChild(newLinkEl);
+            } else if (styleSheet.cssRules) {
+                const newStyleEl = newWindow.current.document.createElement('style');
+                Array.from(styleSheet.cssRules).forEach(rule => {
+                    newStyleEl.appendChild(newWindow.current.document.createTextNode(rule.cssText));
+                });
+                newWindow.current.document.head.appendChild(newStyleEl);
+            }
+        });
+
+        // Set a title for the new window
+        newWindow.current.document.title = "Video Call";
+
+        // Call the onUnload prop when the popup is closed
+        const handleUnload = () => {
+            if (props.onUnload) {
+                props.onUnload();
+            }
+        };
+        newWindow.current.addEventListener('beforeunload', handleUnload);
+
+        // Cleanup: close the window when the main component unmounts
+        return () => {
+            handleUnload();
+            newWindow.current.close();
+        };
+    }, []);
+
+    // Render the children (Sender or Receiver component) into the new window
+    return container ? ReactDOM.createPortal(props.children, container) : null;
+}
+
+function IncomingCallNotification({ caller, onAnswer, onDecline }) {
+    // Basic inline styles for visibility. You can make this look better with CSS.
+    const notificationStyle = {
+        position: 'absolute',
+        top: '10px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '15px 25px',
+        backgroundColor: '#28a745',
+        color: 'white',
+        borderRadius: '8px',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '20px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+    };
+
+    const buttonStyle = {
+        padding: '8px 15px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer'
+    };
+    
+    return (
+        <div style={notificationStyle}>
+            <span>Incoming call from <strong>{caller}...</strong></span>
+            <button style={buttonStyle} onClick={onAnswer}>Answer</button>
+            <button style={{...buttonStyle, backgroundColor: '#dc3545', color: 'white'}} onClick={onDecline}>Decline</button>
+        </div>
+    );
+}
+
 ReactDOM.render(<ChatComponent/>, document.querySelector("#main-component"));
 
 function ChatComponent ({}) {
-    const [users, setUsers] = React.useState([
-        // Pre-populating with dummy data for immediate visual feedback.
-        // Your existing axios call will append the actual users.
-        {id: 1, username: 'Kanon Ahamed', messages: [{text: 'wait a second', sender: 'Kanon Ahamed'}]},
-        {id: 2, username: 'Shakil Khan', messages: [{text: "Hi I'm using dj chat", sender: 'Shakil Khan'}]},
-        {id: 3, username: 'Mamun Sharif', messages: [{text: "Hi I'm using dj chat", sender: 'Mamun Sharif'}]},
-        {id: 4, username: 'Jahid Hassan', messages: [{text: "Hi I'm using dj chat", sender: 'Jahid Hassan'}]},
-    ]);
-    const [selectedUser, setSelectedUser] = React.useState(users[0]); // Initially select the first user
-    const [view, setView] = React.useState('detail');
+    const [users, setUsers] = React.useState([]);
+    const [selectedUser, setSelectedUser] = React.useState(); // Initially select the first user
+    const [isCalling, setIsCalling] = React.useState(false);
+    const [receivingCallData, setReceivingCallData] = React.useState(null);
     const [newMessage, setNewMessage] = React.useState();
     const [remotedata, setRemotedata ] = React.useState();
+    const [showReceiverPopup, setShowReceiverPopup] = React.useState(false);
     const messageConnectionRef = React.useRef(null);
     const messageWindowRef = React.useRef(null);
     const chatBodyRef = React.useRef(null);
     const csrftoken = getCookie('csrftoken');
     const usersRef = React.useRef(users);
 
-    React.useEffect(() => {
-        usersRef.current = users;
-    }, [users]);
+    // React.useEffect(() => {  
+    //     if (users != undefined && selectedUser != null) {
+    //         usersRef.current = users;
+    //     }
+        
+    // }, [users]);
+
+    const dataForReceiverUser = selectedUser ? users.find(user => user.username === selectedUser.username) : null;
 
     React.useEffect(() => {
 
@@ -59,7 +146,8 @@ function ChatComponent ({}) {
                 console.log('new call');
                 const message = eventJSON.message;
                 setRemotedata(message);
-                setView('receiver');
+                // setView('receiver');
+                setReceivingCallData(message);
             } else {
                 const message = eventJSON.message;
                 console.log("onmessage message socket came", usersRef.current);
@@ -73,16 +161,25 @@ function ChatComponent ({}) {
                     sender: message.sender,
                 };
 
-                const updatedUsers = usersRef.current.map(user => {
+                // const updatedUsers = usersRef.current.map(user => {
+                //     if (user.username === senderUsername) {
+                //         return {
+                //             ...user, messages: user.messages ? [...user.messages, newermessage] : [newermessage]
+                //         };
+                //     }
+                //     return user;
+                // });
+
+                // setUsers(updatedUsers);
+                setUsers(prevUsers => prevUsers.map(user => {
                     if (user.username === senderUsername) {
                         return {
-                            ...user, messages: user.messages ? [...user.messages, newermessage] : [newermessage]
+                            ...user,
+                            messages: [...(user.messages || []), newermessage]
                         };
                     }
                     return user;
-                });
-
-                setUsers(updatedUsers);
+                }));
             }
         };
 
@@ -96,7 +193,7 @@ function ChatComponent ({}) {
 const handleUserClick = (user) => {
     console.log(user);
     setSelectedUser(user);
-    setView('detail');
+    // setView('detail');
 };
 
 const handleBackClick = (user) =>{
@@ -122,6 +219,24 @@ const scrollDown = () => {
     }
 };
 
+ const handleInitiateCall = () => {
+        if (selectedUser) {
+            setIsCalling(true);
+        } else {
+            alert("Please select a user to call.");
+        }
+    };
+
+const handleAnswerCall = () => {
+    // This will hide the notification bar and trigger the popup to open
+    setShowReceiverPopup(true);
+};
+
+const handleDeclineCall = () => {
+    // This just hides the notification bar
+    setReceivingCallData(null);
+};
+
 // Push a new message to the selected user's message list
 const addMessage = () => {
     const sendingmessage = {
@@ -131,16 +246,27 @@ const addMessage = () => {
         sender: window.__INITIAL_DATA__.username,
     };
 
-    const updatedUsers = usersRef.current.map(user => {
+    setUsers(prevUsers => prevUsers.map(user => {
         if (user.username === selectedUser.username) {
             return {
-                    ...user, messages: user.messages ? [...user.messages, sendingmessage] : [sendingmessage]
-                };
+                ...user,
+                // Ensure the messages array exists before spreading
+                messages: [...(user.messages || []), sendingmessage]
+            };
         }
         return user;
-    });
+    }));
+
+    // const updatedUsers = usersRef.current.map(user => {
+    //     if (user.username === selectedUser.username) {
+    //         return {
+    //                 ...user, messages: user.messages ? [...user.messages, sendingmessage] : [sendingmessage]
+    //             };
+    //     }
+    //     return user;
+    // });
     
-    setUsers(updatedUsers);
+    // setUsers(updatedUsers);
 
     // Post the message to the server
     axios.post('message/', {
@@ -168,30 +294,51 @@ const handleMessageInput = ()=> {
     console.log(selectedUser, "this is message", newMessage);
     addMessage(); 
 };
- const currentUserData = users.find(user => user.name === selectedUser.name);
+
 
 return (
         <div className="chat-container">
+
+            {isCalling && selectedUser && (
+                <NewWindow onUnload={() => setIsCalling(false)}>
+                    <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username} />
+                </NewWindow>
+            )}
+            {showReceiverPopup && receivingCallData && (
+                <NewWindow onUnload={() => {
+                    setShowReceiverPopup(false);
+                    setReceivingCallData(null);
+                }}>
+                    <Receiver remotedata={receivingCallData} />
+                </NewWindow>
+            )}
+            {receivingCallData && !showReceiverPopup && (
+                <IncomingCallNotification
+                    caller={receivingCallData.sender}
+                    onAnswer={handleAnswerCall}
+                    onDecline={handleDeclineCall}
+                />
+            )}
             {/* Sidebar with User List */}
             <div className="sidebar">
-                <div className="sidebar-header">
+                {/* <div className="sidebar-header">
                     <div className="user-profile">
-                        <img src="https://via.placeholder.com/40" alt="Rifat ul alom" className="avatar" />
-                        <span className="username">Rifat ul alom</span>
+                        <img src={window.__INITIAL_DATA__.profile_image} alt="Rifat ul alom" className="avatar" />
+                        <span className="username">{window.__INITIAL_DATA__.username}</span>
                     </div>
                 </div>
                 <div className="search-bar">
                     <input type="text" placeholder="Search" />
-                </div>
+                </div> */}
                 <div className="user-list">
                     {users.map(user => (
                         <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.id === user.id ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
-                            <img src="https://via.placeholder.com/40" alt={user.username} className="avatar" />
+                            <img src={user.photo} alt={user.username} className="avatar" />
                             <div className="user-info">
                                 <span className="username">{user.username}</span>
-                                <span className="last-message">{user.messages.length > 0 ? user.messages[user.messages.length - 1].text : 'No messages'}</span>
+                                <span className="last-message">{user.messages?.length > 0 ? user.messages[user.messages.length - 1].text : 'No messages'}</span>
                             </div>
-                            <span className="timestamp">{user.messages.length > 0 ? 'a few seconds ago' : ''}</span>
+                            <span className="timestamp">{user.messages?.length > 0 ? 'a few seconds ago' : ''}</span>
                         </div>
                     ))}
                 </div>
@@ -201,13 +348,14 @@ return (
             {selectedUser ? (
                 <div className="chat-window">
                     <div className="chat-header">
-                        <img src="https://via.placeholder.com/40" alt={selectedUser.username} className="avatar" />
+                        <img src={selectedUser.photo} alt={selectedUser.username} className="avatar" />
                         <div className="user-info">
                             <span className="username">{selectedUser.username}</span>
                             <span className="status">Offline</span>
                         </div>
                         <div className="chat-actions">
-                            <button onClick={() => setView('sender')} className="call-button">
+                            {/* <button onClick={() => setView('sender')} className="call-button"> */}
+                            <button onClick={handleInitiateCall} className="call-button">
                                 Call
                             </button>
                         </div>
@@ -216,37 +364,34 @@ return (
                         {/* Dummy messages to show the layout */}
                         {
                             // Check the 'view' state to decide what to render inside the chat body
-                            view === 'sender' ? (
-                                // If we are initiating a call, show the SenderView
-                                console.log("selectedUser", selectedUser),
-                                <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username}  />
-                                // <p>hi</p>
-                            ) : view === 'receiver' ? (
-                                // If we are receiving a call, show the ReceiverView
-                                <Receiver remotedata={remotedata} />
-                                // <p></p>
-                            ) : (
+                           
+                                // console.log("dataForReceiverUser", dataForReceiverUser),
                                 // Otherwise (if view is 'detail'), show the messages list
-                               currentUserData.messages.map((message, index) => (
-                                        <div
-                                            key={index}
-                                            className={`message-container ${message.sender === window.__INITIAL_DATA__?.username ? 'sent' : 'received'}`}
-                                        >
-                                            <div className="message">{message.text}</div>
-                                            <div className="timestamp">{dateHumanize(message.date_time)}</div>
-                                        </div>
-                                    ))
-                            )
+                            dataForReceiverUser.messages.map((message, index) => (
+                                    <div
+                                        key={index}
+                                        className={`message-container ${message.sender === window.__INITIAL_DATA__?.username ? 'sent' : 'received'}`}
+                                    >
+                                        <div className="message">{message.text}</div>
+                                        <div className="timestamp">{dateHumanize(message.date_time)}</div>
+                                    </div>
+                                ))
+                            
                         }
                     </div>
-                    <div className="chat-input">
+                    <div className="chat-input" style={{ display: 'flex', flexDirection: 'row' }}>
                         <input
                             type="text"
                             value={newMessage}
                             onChange={handleMessageChange}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && newMessage.trim() !== '') {
+                                    handleMessageInput();
+                                }
+                            }}
                             placeholder="Type a message..."
                         />
-                         {/* A send button can be added here */}
+                        <button onClick={handleMessageInput}>Send</button>
                     </div>
                 </div>
             ) : (
@@ -256,14 +401,14 @@ return (
     );
 }
 
-function ActiveChatTop ({setView}) {
-    const handleCall = () => {
-        setView('sender');
-    }
-    return(
-        <div>
-            <button onClick={handleCall}>call</button>
-        </div>
-    )
-}
+// function ActiveChatTop ({setView}) {
+//     const handleCall = () => {
+//         setView('sender');
+//     }
+//     return(
+//         <div>
+//             <button onClick={handleCall}>call</button>
+//         </div>
+//     )
+// }
 
