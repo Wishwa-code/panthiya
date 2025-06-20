@@ -12,9 +12,19 @@ class Profile(models.Model):
     photo = models.ImageField(null=True, blank=True, default='profile_pics/default-profile-img.jpg',upload_to='profile_pics/')
     status = models.CharField(default="Hi i'm using dj chat", max_length=255)
     online = models.BooleanField(default=False)
+    friends = models.ManyToManyField(User, related_name='friends', blank=True)
     
     def __str__(self):
         return self.user.username
+    
+class FriendRequest(models.Model): 
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"From {self.from_user.username} to {self.to_user.username}"
     
 class Message(models.Model):
     text = models.TextField()

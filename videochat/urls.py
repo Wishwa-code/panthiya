@@ -14,4 +14,7 @@ urlpatterns = [
     path("editClassroom/<int:classroom_id>", views.edit_classroom, name="edit_post"),
     path('available/', views.available_classes, name='available_classes'),
     path('enroll/<int:classroom_id>/', views.enroll_classroom, name='enroll_classroom'),
+    path('find-user/', views.find_user, name='find_user'), 
+    path('send-friend-request/<int:user_id>/', views.send_friend_request, name='send_friend_request'), 
+    path('accept-friend-request/<int:request_id>/', views.accept_friend_request, name='accept_friend_request')
 ]

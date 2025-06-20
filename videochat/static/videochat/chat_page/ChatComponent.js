@@ -213,9 +213,11 @@ function ChatComponent ({}) {
                 setUsers(prevUsers => 
                     prevUsers.map(user => 
                          { 
+                            // Now, explicitly return the result of your comparison
                             return user.username === user_data.username 
                                 ? { ...user, online: user_data.online } 
                                 : user;
+
                         })
                     
                 );

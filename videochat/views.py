@@ -4,21 +4,23 @@ import json
 import os
 import requests
 
-from .models import Profile, User, Classrooms
+from .models import Profile, User, Classrooms, FriendRequest
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in
+from django.core.paginator import Paginator
 from django.dispatch import receiver
+from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.shortcuts import redirect,HttpResponseRedirect
-from django.urls import reverse
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+
 
 from rest_framework import serializers, status
 from rest_framework import generics
@@ -237,6 +239,109 @@ def chats(request):
         'user_list': user_list,
         'profile': profile,
     })
+
+def find_user(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts/login')
+
+    found_user = None
+    error_message = None
+    friendship_status = None
+
+    # This part handles the form submission for finding a user
+    if request.method == 'POST' and 'username' in request.POST:
+        username_to_find = request.POST.get('username')
+        if username_to_find:
+            try:
+                found_user = User.objects.get(username__iexact=username_to_find)
+                if found_user == request.user:
+                    friendship_status = 'self'
+                elif found_user in request.user.profile.friends.all():
+                    friendship_status = 'friends'
+                elif FriendRequest.objects.filter(from_user=request.user, to_user=found_user).exists():
+                    friendship_status = 'sent'
+                elif FriendRequest.objects.filter(from_user=found_user, to_user=request.user).exists():
+                    friendship_status = 'received'
+
+            except User.DoesNotExist:
+                error_message = f"No user found with the username '{username_to_find}'"
+    
+    # Fetch all pending friend requests for the logged-in user
+    pending_requests = FriendRequest.objects.filter(to_user=request.user, is_accepted=False)
+
+    profile = Profile.objects.get(user=request.user.id)
+
+    return render(request, 'videochat/find_freind.html', {
+        'profile': profile,
+        'found_user': found_user,
+        'error_message': error_message,
+        'friendship_status': friendship_status,
+        'pending_requests': pending_requests, # ✨ Pass requests to template
+    })
+
+@require_POST
+@csrf_exempt
+def send_friend_request(request, user_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Authentication required"}, status=401)
+
+    try:
+        to_user = User.objects.get(id=user_id)
+        from_user = request.user
+
+        # Prevent sending request to self
+        if to_user == from_user:
+            return JsonResponse({"error": "You cannot send a friend request to yourself."}, status=400)
+
+        # Prevent sending duplicate requests
+        if FriendRequest.objects.filter(from_user=from_user, to_user=to_user).exists():
+            return JsonResponse({"error": "Friend request already sent."}, status=400)
+        
+        # Prevent sending requests if already friends
+        if to_user in from_user.profile.friends.all():
+            return JsonResponse({"error": "You are already friends."}, status=400)
+
+        friend_request = FriendRequest(from_user=from_user, to_user=to_user)
+        friend_request.save()
+
+        return JsonResponse({"success": "Friend request sent successfully."})
+
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+    
+@require_POST
+@csrf_exempt
+def accept_friend_request(request, request_id): # ✨ New View
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Authentication required"}, status=401)
+    
+    try:
+        friend_request = FriendRequest.objects.get(id=request_id)
+
+        # Ensure the request is for the logged-in user
+        if friend_request.to_user != request.user:
+            return JsonResponse({"error": "Unauthorized action."}, status=403)
+        
+        # Add users to each other's friends list
+        from_user = friend_request.from_user
+        to_user = request.user
+        
+        to_user.profile.friends.add(from_user)
+        from_user.profile.friends.add(to_user)
+        
+        # Mark as accepted or delete the request
+        friend_request.is_accepted = True
+        friend_request.save()
+        # Alternatively, you can delete it: friend_request.delete()
+
+        return JsonResponse({"success": "Friend request accepted."})
+
+    except FriendRequest.DoesNotExist:
+        return JsonResponse({"error": "Friend request not found."}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 class MessageView(CreateAPIView):
     serializer_class = MessageSerializer
