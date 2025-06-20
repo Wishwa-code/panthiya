@@ -189,114 +189,163 @@ function ChatComponent ({}) {
 
     }, []);
 
+    const notificationconnectionRef = React.useRef(null);
 
-const handleUserClick = (user) => {
-    console.log(user);
-    setSelectedUser(user);
-    // setView('detail');
-};
+    React.useEffect(() => {
+    /*React.store.dispatch('generatePeerId');*/
+        window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/'
 
-const handleBackClick = (user) =>{
-    setSelectedUser(null);
-    setView('list');
-};
+        notificationconnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/notification/`);
 
-const handleCall = () => {
-    setView('call')
-}
-  
-const handleMessageChange = (e) => {
-    setNewMessage(e.target.value);
-};
+        console.log(notificationconnectionRef)
 
-const dateHumanize = (date) => {
-    return moment(date).fromNow();  // Format date to human-readable form
-};
+        notificationconnectionRef.current.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+        
+        // 2. Log the whole object so you can see its structure
+            console.log("📣 Notification Received:", data);
+            if (data.status === 'status_change') {
+                const user_data = data.message;
+                console.log(`Status Change for ${user_data.username}: Online = ${user_data.online}`);
+               
+                
+                // Update the state to reflect the user's new online status
+                setUsers(prevUsers => 
+                    prevUsers.map(user => 
+                         { 
+                            return user.username === user_data.username 
+                                ? { ...user, online: user_data.online } 
+                                : user;
+                        })
+                    
+                );
+            } else if (data.status === 'new_user') {
+                const user_data = data.message;
+                console.log(`A new user has registered: ${user_data.username}`);
 
-const scrollDown = () => {
-    if (chatBodyRef.current) {
-        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;  // Scroll to the bottom
+                // Add the new user to the top of the users list
+                setUsers(prevUsers => [user_data, ...prevUsers]);
+            }
+        };
+
+
+        notificationconnectionRef.current.onopen = (event) => {
+            console.log('Created', event);
+        };
+
+        return () => {
+            notificationconnectionRef.current.close();
+        };
+    }, []);
+
+
+    const handleUserClick = (user) => {
+        console.log(user);
+        setSelectedUser(user);
+        // setView('detail');
+    };
+
+    const handleBackClick = (user) =>{
+        setSelectedUser(null);
+        setView('list');
+    };
+
+    const handleCall = () => {
+        setView('call')
     }
-};
-
- const handleInitiateCall = () => {
-        if (selectedUser) {
-            setIsCalling(true);
-        } else {
-            alert("Please select a user to call.");
-        }
-    };
-
-const handleAnswerCall = () => {
-    // This will hide the notification bar and trigger the popup to open
-    setShowReceiverPopup(true);
-};
-
-const handleDeclineCall = () => {
-    // This just hides the notification bar
-    setReceivingCallData(null);
-};
-
-// Push a new message to the selected user's message list
-const addMessage = () => {
-    const sendingmessage = {
-        text: newMessage,
-        read: true,
-        date_time: moment().format(),
-        sender: window.__INITIAL_DATA__.username,
-    };
-
-    setUsers(prevUsers => prevUsers.map(user => {
-        if (user.username === selectedUser.username) {
-            return {
-                ...user,
-                // Ensure the messages array exists before spreading
-                messages: [...(user.messages || []), sendingmessage]
-            };
-        }
-        return user;
-    }));
-
-    // const updatedUsers = usersRef.current.map(user => {
-    //     if (user.username === selectedUser.username) {
-    //         return {
-    //                 ...user, messages: user.messages ? [...user.messages, sendingmessage] : [sendingmessage]
-    //             };
-    //     }
-    //     return user;
-    // });
     
-    // setUsers(updatedUsers);
+    const handleMessageChange = (e) => {
+        setNewMessage(e.target.value);
+    };
 
-    // Post the message to the server
-    axios.post('message/', {
-        text: newMessage,
-        receiver: selectedUser.username,
-    }, {
-        headers: {
-            'X-CSRFToken': csrftoken,  
-        },
-        withCredentials: true  
-    })
-    .then((response) => {
-        console.log("response after sending message", response);
-        console.log(selectedUser.username);
-    })
-    .catch((error) => {
-        console.log(error);
-    })
-    .finally(() => {
-        setNewMessage('');  // Clear the message input
-    });
-}
+    const dateHumanize = (date) => {
+        return moment(date).fromNow();  // Format date to human-readable form
+    };
 
-const handleMessageInput = ()=> {
-    console.log(selectedUser, "this is message", newMessage);
-    addMessage(); 
-};
+    const scrollDown = () => {
+        if (chatBodyRef.current) {
+            chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;  // Scroll to the bottom
+        }
+    };
+
+    const handleInitiateCall = () => {
+            if (selectedUser) {
+                setIsCalling(true);
+            } else {
+                alert("Please select a user to call.");
+            }
+        };
+
+    const handleAnswerCall = () => {
+        // This will hide the notification bar and trigger the popup to open
+        setShowReceiverPopup(true);
+    };
+
+    const handleDeclineCall = () => {
+        // This just hides the notification bar
+        setReceivingCallData(null);
+    };
+
+    // Push a new message to the selected user's message list
+    const addMessage = () => {
+        const sendingmessage = {
+            text: newMessage,
+            read: true,
+            date_time: moment().format(),
+            sender: window.__INITIAL_DATA__.username,
+        };
+
+        setUsers(prevUsers => prevUsers.map(user => {
+            if (user.username === selectedUser.username) {
+                return {
+                    ...user,
+                    // Ensure the messages array exists before spreading
+                    messages: [...(user.messages || []), sendingmessage]
+                };
+            }
+            return user;
+        }));
+
+        // const updatedUsers = usersRef.current.map(user => {
+        //     if (user.username === selectedUser.username) {
+        //         return {
+        //                 ...user, messages: user.messages ? [...user.messages, sendingmessage] : [sendingmessage]
+        //             };
+        //     }
+        //     return user;
+        // });
+        
+        // setUsers(updatedUsers);
+
+        // Post the message to the server
+        axios.post('message/', {
+            text: newMessage,
+            receiver: selectedUser.username,
+        }, {
+            headers: {
+                'X-CSRFToken': csrftoken,  
+            },
+            withCredentials: true  
+        })
+        .then((response) => {
+            console.log("response after sending message", response);
+            console.log(selectedUser.username);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .finally(() => {
+            setNewMessage('');  // Clear the message input
+        });
+    }
+
+    const handleMessageInput = ()=> {
+        console.log(selectedUser, "this is message", newMessage);
+        addMessage(); 
+    };
 
 
-return (
+    return (
         <div className="chat-container">
 
             {isCalling && selectedUser && (
@@ -333,7 +382,10 @@ return (
                 <div className="user-list">
                     {users.map(user => (
                         <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.id === user.id ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
-                            <img src={user.photo} alt={user.username} className="avatar" />
+                            <div className="avatar-container">
+                                <img src={user.photo} alt={user.username} className="avatar" />
+                                <span className={`online-indicator ${user.online ? 'online' : 'offline'}`}></span>
+                            </div>
                             <div className="user-info">
                                 <span className="username">{user.username}</span>
                                 <span className="last-message">{user.messages?.length > 0 ? user.messages[user.messages.length - 1].text : 'No messages'}</span>
@@ -348,10 +400,12 @@ return (
             {selectedUser ? (
                 <div className="chat-window">
                     <div className="chat-header">
-                        <img src={selectedUser.photo} alt={selectedUser.username} className="avatar" />
-                        <div className="user-info">
-                            <span className="username">{selectedUser.username}</span>
-                            <span className="status">Offline</span>
+                        <div className="chat-receiver-data">
+                            <img src={selectedUser.photo} alt={selectedUser.username} className="avatar" />
+                            <div className="user-info">
+                                <span className="username">{selectedUser.username}</span>
+                                <span className="status">{selectedUser.online ? "Online" : "Offline" }</span>
+                            </div>
                         </div>
                         <div className="chat-actions">
                             {/* <button onClick={() => setView('sender')} className="call-button"> */}

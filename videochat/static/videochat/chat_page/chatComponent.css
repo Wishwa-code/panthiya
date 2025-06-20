@@ -166,6 +166,16 @@ body {
     text-align: right;
 }
 
+
+.chat-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.chat-receiver-data{
+    display:flex;
+    flex-direction: row;
+}
 /* Chat Input */
 .chat-input {
     padding: 10px 20px;
@@ -177,4 +187,32 @@ body {
     padding: 12px;
     border-radius: 20px;
     border: 1px solid #ccc;
+}
+
+
+
+
+
+
+.avatar-container {
+    position: relative;
+    display: inline-block; /* Or flex, depending on your layout */
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: -2px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white; /* To make it stand out from the avatar */
+}
+
+.online-indicator.online {
+    background-color: #28a745; /* Green for online */
+}
+
+.online-indicator.offline {
+    background-color: #6c757d; /* Grey for offline */
 }

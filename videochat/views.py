@@ -9,6 +9,8 @@ from .models import Profile, User, Classrooms
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 from django.shortcuts import render
 from django.shortcuts import redirect,HttpResponseRedirect
 from django.urls import reverse
@@ -342,22 +344,35 @@ class CreateChannelView(APIView):
             'channel_name': channel_name,
             'uid': uid
         })
+
+@receiver(user_logged_in)
+def my_custom_function_on_login(sender, request, user, **kwargs):
+    print(f"SIGNAL: User {user.username} just logged in.")
+    _change_status(user)
     
-        #url = f'https://api.agora.io/v1/projects/{app_id}/channels'  
 
-        #headers = {  
-            #'Authorization': f'Bearer {token}',  
-            #'Content-Type': 'application/json'  
-        #}  
 
-        #data = {  
-            #'name': channel_name  
-        #}  
+def _change_status(user: User):
+        """
+        @param user:
+        """
+        profile = user.profile
+        profile.online = True
+        profile.save()
+        notify_others(user)
 
-        #response = requests.post(url, headers=headers, json=data)  
+def notify_others(user: User):
+    """
 
-        #if response.status_code == 200:  
-            #print(response.json())  
-        #else:  
-            #print(f'Error: {response.status_code}')  
-            #rint(response.text)
+    @param user:
+    @return:
+    """
+    serializer = UserSerializer(user, many=False)
+    channel_layer = get_channel_layer()
+    print('came to notify_others')
+    async_to_sync(channel_layer.group_send)(
+        'notification', {
+            'type': 'user_online',
+            'message': serializer.data
+        }
+    )
