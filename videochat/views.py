@@ -85,9 +85,9 @@ def index(request):
     paginator = Paginator(class_list, 10)
 
     page_number= request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    class_obj = paginator.get_page(page_number)
 
-    print(page_obj)
+    print(class_obj)
 
 
     profile = Profile.objects.get(user=request.user.id)
@@ -97,7 +97,7 @@ def index(request):
         'myData': myData,
         'user_list': user_list,
         'profile': profile,
-        'page_obj': page_obj,
+        'class_obj': class_obj,
         # 'token_list': token_list,
     })
 
@@ -145,7 +145,7 @@ def available_classes(request):
 
     paginator = Paginator(class_list, 10)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    class_obj = paginator.get_page(page_number)
 
     profile = Profile.objects.get(user=request.user.id)
     user_list = User.objects.all()
@@ -154,7 +154,7 @@ def available_classes(request):
         'myData': False,
         'user_list': user_list,
         'profile': profile,
-        'page_obj': page_obj,
+        'class_obj': class_obj,
     })
 
 @csrf_exempt
@@ -359,7 +359,9 @@ class UsersView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        users = User.objects.exclude(pk=self.request.user.pk).order_by('-profile__online').all()
+        # users = User.objects.exclude(pk=self.request.user.pk).order_by('-profile__online').all()
+        profile = self.request.user.profile
+        users = profile.friends.all().order_by('-profile__online').all()
         print(users)
         return users
 

@@ -179,20 +179,29 @@
 
 }
 
-.edit-class-subject-input{
+/* !------------- Styles for the input fields populated for changing classroom details -------------! */
+
+.edit-class-name-input{
   width: 150px;
   border-radius: 15px;
   padding-right:10px;
     padding-left:10px;
 }
 
-.edit-class-other-input{
+.edit-class-subject-input{
   width: 100px;
   margin-right:10px;
   border-radius: 15px;
-    padding-right:10px;
-    padding-left:10px;
+  padding-right:10px;
+  padding-left:10px;
+}
 
+.edit-class-grade-input{
+  width: 100px;
+  margin-right:10px;
+  border-radius: 15px;
+  padding-right:10px;
+  padding-left:10px;
 }
 
 .edit-classroom-image-input {
@@ -315,7 +324,6 @@ samp{
 }
 
 #participant-count{
-
   display: flex;
   align-items: center;
 }
@@ -323,11 +331,3 @@ samp{
 
 
 
-.btn-success{
-  color:#ffffff;
-  background-color:#E8B824;
-}
-.btn-success:hover{
-  color:#000000;
-  background-color:#ffffff;
-}

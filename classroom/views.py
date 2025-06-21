@@ -1,3 +1,9 @@
+#*This file has the class based view for Sign up feature,
+# This view deliveres signup form to user and validates its inputs and create 
+# new user object and redirect user to index page if the signup succesfull or else will follow 
+# django default procedure when invalid form is submitted. Also whenever user signup
+# view is called succesfully new profile object with users profile image is created.
+
 from .forms import SignUpForm
 
 from django.contrib.auth import login
@@ -9,9 +15,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy
 
-
 from videochat.models import Profile
-
 
 class SignUpView(generic.CreateView):
     form_class = SignUpForm
@@ -22,7 +26,6 @@ class SignUpView(generic.CreateView):
         response = super().form_valid(form)
         user = self.object
         profile_picture = form.cleaned_data.get('profile_picture')
-        print('🖼️ profile picture', profile_picture)
 
         if profile_picture:
             Profile.objects.create(user=user, photo=profile_picture)
@@ -33,41 +36,7 @@ class SignUpView(generic.CreateView):
 
         return redirect('index')
     
-# class CustomLoginView(LoginView):
-#     # You can keep the template_name here or in the urls.py, it's your choice
-#     template_name = 'registration/login.html'
-
-#     def form_valid(self, form):
-#         """
-#         This method is called when valid form data has been POSTed.
-#         It should return an HttpResponse.
-#         The `form` object is the AuthenticationForm instance.
-#         """
-        
-#         # --- THIS IS WHERE YOU ADD YOUR CUSTOM FUNCTION ---
-#         print("Login was successful, executing my custom function!")
-        
-#         # Example: Get the user object that is about to log in
-#         user = form.get_user()
-#         print(f"The user logging in is: {user.username}")
-
-#         # You can call any function you want here.
-#         # my_custom_login_function(user)
-
-#         # ---------------------------------------------------
-
-#         # Now, let the original LoginView do the rest of the work.
-#         # This will log the user in and redirect to the success URL.
-#         # It's crucial to return this super() call.
-#         return super().form_valid(form)
-    
-@login_required
-def profile(request):
-    return render(request, 'profile.html') 
 
 
 
-# class SignUpView(generic.CreateView):
-#     form_class = UserCreationForm
-#     success_url = reverse_lazy('accounts:login')  
-#     template_name = 'registration/signup.html'
+

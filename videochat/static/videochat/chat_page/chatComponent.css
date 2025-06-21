@@ -5,14 +5,18 @@ body {
     background-color: #f0f2f5;
 }
 
+#main-component{
+    height:100%;
+}
+
 /* Chat Container */
 .chat-container {
     display: flex;
-    height: 90vh;
+    height: 100%;
     width:100%;
     border: 1px solid #ddd;
-    background-color: #fff;
-    color:#333;
+    background-color: #F4F7F6;
+    color:#1C2024;
 }
 
 /* Sidebar */
@@ -33,6 +37,9 @@ body {
 .sidebar-header .user-profile {
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+
 }
 
 .avatar {
@@ -42,12 +49,6 @@ body {
     margin-right: 15px;
 }
 
-.search-bar input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-}
 
 .user-list {
     flex-grow: 1;
@@ -67,13 +68,18 @@ body {
 }
 
 .user-list-item.active {
-    background-color: #e8e8e8;
+    background-color: #D0D5DC;
 }
 
 .user-list-item .user-info {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    max-height:4.5em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    width:70%;
+    
 }
 
 .username {
@@ -82,7 +88,13 @@ body {
 
 .last-message, .timestamp {
     font-size: 0.85em;
-    color: #666;
+    color: #606C76;
+    
+}
+
+.timestamp{
+    font-size:10px;
+    text-align:right;
 }
 
 /* Chat Window */
@@ -90,13 +102,26 @@ body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: #e5ddd5;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* WhatsApp-like background */
+    background-color: #F4F7F6;
+    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-position: top;
+    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
 }
 
-.chat-header {
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F7F6;
+    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-position: top;
+    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+}
+
+.placeholder{
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 10px 15px;
     background-color: #f6f6f6;
     border-bottom: 1px solid #ddd;
@@ -109,7 +134,7 @@ body {
 
 .chat-header .status {
     font-size: 0.8em;
-    color: #888;
+    color: #606C76;
 }
 
 .chat-body {
@@ -134,7 +159,7 @@ body {
 
 .message-container .timestamp {
     font-size: 0.75em;
-    color: #999;
+    color: #606C76;
     margin-top: 2px;
 }
 
@@ -144,7 +169,7 @@ body {
 }
 
 .message-container.received .message {
-    background-color: #fff;
+    background-color: #84b0dd;
     border-top-left-radius: 0;
 }
 .message-container.received .timestamp {
@@ -158,7 +183,8 @@ body {
 }
 
 .message-container.sent .message {
-    background-color: #dcf8c6;
+    background-color: #D0D5DC;
+    color:#1C2024;
     border-top-right-radius: 0;
 }
 
@@ -171,6 +197,10 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding:15px;
+    background-color: #F4F7F6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
 }
 .chat-receiver-data{
     display:flex;
@@ -187,9 +217,22 @@ body {
     padding: 12px;
     border-radius: 20px;
     border: 1px solid #ccc;
+    margin-right: 20px;
 }
 
-
+.call-button{
+    background-color: #FDD693; /* YouTube red */
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  
+}
 
 
 

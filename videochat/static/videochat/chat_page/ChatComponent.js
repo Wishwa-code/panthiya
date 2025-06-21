@@ -4,22 +4,17 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-// NewWindow.js - Create this new file
-
 function NewWindow(props) {
     const [container, setContainer] = React.useState(null);
     const newWindow = React.useRef(null);
 
     React.useEffect(() => {
-        // Open a new window and store a reference to it
         newWindow.current = window.open('', 'callWindow', 'width=700,height=600');
 
-        // Create a container div in the new window to render into
         const div = newWindow.current.document.createElement('div');
         newWindow.current.document.body.appendChild(div);
         setContainer(div);
         
-        // Copy all stylesheets from the main page to the new window
         Array.from(document.styleSheets).forEach(styleSheet => {
             if (styleSheet.href) {
                 const newLinkEl = newWindow.current.document.createElement('link');
@@ -35,10 +30,8 @@ function NewWindow(props) {
             }
         });
 
-        // Set a title for the new window
         newWindow.current.document.title = "Video Call";
 
-        // Call the onUnload prop when the popup is closed
         const handleUnload = () => {
             if (props.onUnload) {
                 props.onUnload();
@@ -46,19 +39,16 @@ function NewWindow(props) {
         };
         newWindow.current.addEventListener('beforeunload', handleUnload);
 
-        // Cleanup: close the window when the main component unmounts
         return () => {
             handleUnload();
             newWindow.current.close();
         };
     }, []);
 
-    // Render the children (Sender or Receiver component) into the new window
     return container ? ReactDOM.createPortal(props.children, container) : null;
 }
 
 function IncomingCallNotification({ caller, onAnswer, onDecline }) {
-    // Basic inline styles for visibility. You can make this look better with CSS.
     const notificationStyle = {
         position: 'absolute',
         top: '10px',
@@ -107,12 +97,6 @@ function ChatComponent ({}) {
     const csrftoken = getCookie('csrftoken');
     const usersRef = React.useRef(users);
 
-    // React.useEffect(() => {  
-    //     if (users != undefined && selectedUser != null) {
-    //         usersRef.current = users;
-    //     }
-        
-    // }, [users]);
 
     const dataForReceiverUser = selectedUser ? users.find(user => user.username === selectedUser.username) : null;
 
@@ -133,8 +117,6 @@ function ChatComponent ({}) {
         });
 
         window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
-        // window.REACT_APP_WS_ENDPOINT = 'wss://panthiya.onrender.com/';
-
         messageConnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${window.__INITIAL_DATA__.username}/`);
         console.log(messageConnectionRef);
 
@@ -161,16 +143,6 @@ function ChatComponent ({}) {
                     sender: message.sender,
                 };
 
-                // const updatedUsers = usersRef.current.map(user => {
-                //     if (user.username === senderUsername) {
-                //         return {
-                //             ...user, messages: user.messages ? [...user.messages, newermessage] : [newermessage]
-                //         };
-                //     }
-                //     return user;
-                // });
-
-                // setUsers(updatedUsers);
                 setUsers(prevUsers => prevUsers.map(user => {
                     if (user.username === senderUsername) {
                         return {
@@ -192,7 +164,6 @@ function ChatComponent ({}) {
     const notificationconnectionRef = React.useRef(null);
 
     React.useEffect(() => {
-    /*React.store.dispatch('generatePeerId');*/
         window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/'
 
         notificationconnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/notification/`);
@@ -202,18 +173,14 @@ function ChatComponent ({}) {
         notificationconnectionRef.current.onmessage = (event) => {
             const data = JSON.parse(event.data);
         
-        // 2. Log the whole object so you can see its structure
             console.log("📣 Notification Received:", data);
             if (data.status === 'status_change') {
                 const user_data = data.message;
                 console.log(`Status Change for ${user_data.username}: Online = ${user_data.online}`);
-               
-                
-                // Update the state to reflect the user's new online status
+        
                 setUsers(prevUsers => 
                     prevUsers.map(user => 
-                         { 
-                            // Now, explicitly return the result of your comparison
+                        { 
                             return user.username === user_data.username 
                                 ? { ...user, online: user_data.online } 
                                 : user;
@@ -225,11 +192,9 @@ function ChatComponent ({}) {
                 const user_data = data.message;
                 console.log(`A new user has registered: ${user_data.username}`);
 
-                // Add the new user to the top of the users list
                 setUsers(prevUsers => [user_data, ...prevUsers]);
             }
         };
-
 
         notificationconnectionRef.current.onopen = (event) => {
             console.log('Created', event);
@@ -244,30 +209,15 @@ function ChatComponent ({}) {
     const handleUserClick = (user) => {
         console.log(user);
         setSelectedUser(user);
-        // setView('detail');
     };
 
-    const handleBackClick = (user) =>{
-        setSelectedUser(null);
-        setView('list');
-    };
-
-    const handleCall = () => {
-        setView('call')
-    }
     
     const handleMessageChange = (e) => {
         setNewMessage(e.target.value);
     };
 
     const dateHumanize = (date) => {
-        return moment(date).fromNow();  // Format date to human-readable form
-    };
-
-    const scrollDown = () => {
-        if (chatBodyRef.current) {
-            chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;  // Scroll to the bottom
-        }
+        return moment(date).fromNow();  
     };
 
     const handleInitiateCall = () => {
@@ -279,16 +229,13 @@ function ChatComponent ({}) {
         };
 
     const handleAnswerCall = () => {
-        // This will hide the notification bar and trigger the popup to open
         setShowReceiverPopup(true);
     };
 
     const handleDeclineCall = () => {
-        // This just hides the notification bar
         setReceivingCallData(null);
     };
 
-    // Push a new message to the selected user's message list
     const addMessage = () => {
         const sendingmessage = {
             text: newMessage,
@@ -301,25 +248,12 @@ function ChatComponent ({}) {
             if (user.username === selectedUser.username) {
                 return {
                     ...user,
-                    // Ensure the messages array exists before spreading
                     messages: [...(user.messages || []), sendingmessage]
                 };
             }
             return user;
         }));
 
-        // const updatedUsers = usersRef.current.map(user => {
-        //     if (user.username === selectedUser.username) {
-        //         return {
-        //                 ...user, messages: user.messages ? [...user.messages, sendingmessage] : [sendingmessage]
-        //             };
-        //     }
-        //     return user;
-        // });
-        
-        // setUsers(updatedUsers);
-
-        // Post the message to the server
         axios.post('message/', {
             text: newMessage,
             receiver: selectedUser.username,
@@ -337,14 +271,9 @@ function ChatComponent ({}) {
             console.log(error);
         })
         .finally(() => {
-            setNewMessage('');  // Clear the message input
+            setNewMessage('');  
         });
     }
-
-    const handleMessageInput = ()=> {
-        console.log(selectedUser, "this is message", newMessage);
-        addMessage(); 
-    };
 
 
     return (
@@ -355,6 +284,7 @@ function ChatComponent ({}) {
                     <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username} />
                 </NewWindow>
             )}
+
             {showReceiverPopup && receivingCallData && (
                 <NewWindow onUnload={() => {
                     setShowReceiverPopup(false);
@@ -363,6 +293,7 @@ function ChatComponent ({}) {
                     <Receiver remotedata={receivingCallData} />
                 </NewWindow>
             )}
+
             {receivingCallData && !showReceiverPopup && (
                 <IncomingCallNotification
                     caller={receivingCallData.sender}
@@ -370,20 +301,17 @@ function ChatComponent ({}) {
                     onDecline={handleDeclineCall}
                 />
             )}
-            {/* Sidebar with User List */}
+
             <div className="sidebar">
-                {/* <div className="sidebar-header">
+                <div className="sidebar-header">
                     <div className="user-profile">
                         <img src={window.__INITIAL_DATA__.profile_image} alt="Rifat ul alom" className="avatar" />
                         <span className="username">{window.__INITIAL_DATA__.username}</span>
                     </div>
                 </div>
-                <div className="search-bar">
-                    <input type="text" placeholder="Search" />
-                </div> */}
                 <div className="user-list">
                     {users.map(user => (
-                        <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.id === user.id ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
+                        <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.username === user.username ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
                             <div className="avatar-container">
                                 <img src={user.photo} alt={user.username} className="avatar" />
                                 <span className={`online-indicator ${user.online ? 'online' : 'offline'}`}></span>
@@ -398,7 +326,6 @@ function ChatComponent ({}) {
                 </div>
             </div>
 
-            {/* Main Chat Window */}
             {selectedUser ? (
                 <div className="chat-window">
                     <div className="chat-header">
@@ -410,19 +337,13 @@ function ChatComponent ({}) {
                             </div>
                         </div>
                         <div className="chat-actions">
-                            {/* <button onClick={() => setView('sender')} className="call-button"> */}
                             <button onClick={handleInitiateCall} className="call-button">
-                                Call
+                                <i class='fa-duotone fa-solid fa-phone-volume nav-bar-icons'></i>Video call
                             </button>
                         </div>
                     </div>
                     <div className="chat-body" ref={chatBodyRef}>
-                        {/* Dummy messages to show the layout */}
                         {
-                            // Check the 'view' state to decide what to render inside the chat body
-                           
-                                // console.log("dataForReceiverUser", dataForReceiverUser),
-                                // Otherwise (if view is 'detail'), show the messages list
                             dataForReceiverUser.messages.map((message, index) => (
                                     <div
                                         key={index}
@@ -431,8 +352,7 @@ function ChatComponent ({}) {
                                         <div className="message">{message.text}</div>
                                         <div className="timestamp">{dateHumanize(message.date_time)}</div>
                                     </div>
-                                ))
-                            
+                            ))
                         }
                     </div>
                     <div className="chat-input" style={{ display: 'flex', flexDirection: 'row' }}>
@@ -442,29 +362,17 @@ function ChatComponent ({}) {
                             onChange={handleMessageChange}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && newMessage.trim() !== '') {
-                                    handleMessageInput();
+                                    addMessage();
                                 }
                             }}
                             placeholder="Type a message..."
                         />
-                        <button onClick={handleMessageInput}>Send</button>
+                        <button  className="call-button"  onClick={addMessage}>Send</button>
                     </div>
                 </div>
             ) : (
-                <div className="chat-window placeholder">Select a chat to start messaging</div>
+                <div className="chat-window placeholder" style={{ textAlign: "center" }}>Send and Receive messages from your freinds.<br /> Clicks on freind name to start chattting.</div>
             )}
         </div>
     );
 }
-
-// function ActiveChatTop ({setView}) {
-//     const handleCall = () => {
-//         setView('sender');
-//     }
-//     return(
-//         <div>
-//             <button onClick={handleCall}>call</button>
-//         </div>
-//     )
-// }
-

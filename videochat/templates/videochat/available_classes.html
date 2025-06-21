@@ -1,17 +1,16 @@
 {% extends "videochat/layout.html" %}
 {% load static %}
 
-    {% block body %}
+{% block body %}
     <div id="main-component">
         <div class="class-grid-container">
             <div class="class-grid-title">
                 <h2>Available Classes</h2>
             </div>
-
             <div class="class-grid">
-                {% for classroom in page_obj %}
+                {% for classroom in class_obj %}
                     <div id="index_classroom_wrapper">
-                        <div id="index_post_photo">
+                        <div id="index_classroom_thumbnail">
                             <img id="classroom-image-{{classroom.id}}" height="20" src="{{classroom.image_url}}" alt="{{classroom.name}}">
                         </div>
 
@@ -30,7 +29,7 @@
                                 </div>
 
                                 <div>
-                                    <button class="btn btn-success" onclick="enrollClassroom({{ classroom.id }})">
+                                    <button class="button-inside-join-card enroll-btn" data-classroom-id="{{ classroom.id }}">
                                         Enroll
                                     </button>
                                 </div>
@@ -42,36 +41,13 @@
                 {% endfor %}
             </div>
         </div>
-
-        <div id="create-class-cards">
-        </div>
     </div>
-    {% endblock %}
+{% endblock %}
 
-    {% block script %}
+{% block style %}
     <link href="{% static 'videochat/my_classes_page/classes.css' %}" rel="stylesheet">
+{% endblock %}
 
-    <script>
-        function enrollClassroom(classroomId) {
-            fetch(`/enroll/${classroomId}/`, {
-                method: 'PUT',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Enrolled successfully!");
-                    location.reload();
-                } else {
-                    alert(data.error || "Something went wrong!");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to enroll.");
-            });
-        }
-    </script>
+{% block script %}
+    <script src="{% static 'videochat/my_classes_page/join_available_class.js' %}"></script>
 {% endblock %}

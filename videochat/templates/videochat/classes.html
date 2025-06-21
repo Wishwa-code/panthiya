@@ -11,10 +11,10 @@
                     
                     
                     <div class="class-grid">
-                        {% for classroom in page_obj %}
+                        {% for classroom in class_obj %}
                         {# Each "contact" is a Contact model object. #}
                             <div id="index_classroom_wrapper">
-                                <div id="index_post_photo">
+                                <div id="index_classroom_thumbnail">
                                     <img id="classroom-image-{{classroom.id}}" height="20" src="{{classroom.image_url}}" alt="{{post.image}}">  
                                     <input 
                                         type="file" 
@@ -57,17 +57,12 @@
                                     
                                 </div>
                             </div>
-                        
-            
+                        {% empty %}
+                            <p>Click on the find new classroom button on <br> navigation bar to find new classes.</p>
                         {% endfor %}
                         </div>
                     </div>
-                <div id="create-class-cards">
-                </div>
-
             </div>
-
-
 {% endblock %}
 
 {% block style %}
@@ -90,23 +85,3 @@
         <script src="{% static 'videochat/my_classes_page/class_edit_button.js' %}"></script>
 {% endblock %}
 
-
-
-
-
-
-
-
-            <!--
-            <script>
-                const videoElement = document.getElementById('myVideo');
-
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(stream => {
-                        videoElement.srcObject = stream;
-                    })
-                    .catch(error => {
-                        console.error('Error accessing   media devices:', error);
-                    });
-            </script>
-            -->

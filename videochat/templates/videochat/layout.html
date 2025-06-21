@@ -5,24 +5,25 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"  />
 
-        <title>{% block title %}Auctions{% endblock %}</title>
+        <title>{% block title %}පන්තිය | Panthiya{% endblock %}</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Sinhala:wght@100..900&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'videochat/layout/layout.css' %}" rel="stylesheet">
         <link href="{% static 'videochat/layout/sidenav.css' %}" rel="stylesheet">
-
-
 
         <script src="https://kit.fontawesome.com/8056cc3b3e.js" crossorigin="anonymous"></script>
         <script crossorigin src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
         <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
         <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>   
         <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
-
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
         <script type="text/babel" src="{% static 'videochat/layout/sidenav_toggle_button.js' %}"></script>
-
+        <script src="{% static 'videochat/layout/header_hide.js' %}"></script>
 
         {% block style %}
         {% endblock %}
@@ -31,54 +32,64 @@
         {% endblock %}
     </head>
     <body>
-        
-
-
         <div id="void-container">
-           
             <div id="side-navigation-bar" class="navbar">
-                <div class="profile-section">
-                    <img class="profile-pic" width="100" height="100" src={{profile.photo.url}} alt="User" />
-                    <p class="user-name">{{profile.user.username}}</p>
+                <div class="logo">
+                    {% comment %} <img class="profile-pic" width="100" height="100" src={{profile.photo.url}} alt="User" /> {% endcomment %}
+                    <p class="logo-name"><b>පන්තිය</b></p>
                 </div>
-                <!-- {console.log(user)} -->
+
                 <div class="top_bar_nav">
-                    <div class="nav-item">
-                        <a href="/" class="nav-link">
-                            <i class='fa-duotone fa-solid fa-chalkboard-user nav-bar-icons'></i>
-                            Classes</a>
+                    <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                        <div class="nav-link " >
+                            <i class='fa-duotone fa-solid fa-person-chalkboard nav-bar-icons'></i>
+                                My Classrooms
+                        </div>
+                    </a>
+                    <a href="/available/" class="nav-item {% if request.path == '/available/' %}active{% endif %}">
+                    <div  class="nav-link ">
+                        
+                            <i class='fa-duotone fa-solid fa-search nav-bar-icons'></i>
+                                Find New Classroom
                     </div>
-                    <div class="nav-item">
-                        <a href="/chats/" class="nav-link">
-                            <i class='fa-duotone fa-solid fa-comments nav-bar-icons'></i>
-                            Freinds</a>
-                    </div>
-                    
+                    </a>
+                    <a href="/create-class/" class="nav-item {% if request.path == '/create-class/' %}active{% endif %}">
+                        <div class="nav-link ">
+                            <i class='fa-duotone fa-solid fa-plus nav-bar-icons'></i>
+                            Create a classroom
+                        </div>
+                    </a>
+                    <a href="/find-freind/" class="nav-item {% if request.path == '/find-freind/' %}active{% endif %}">
+                        <div class="nav-link ">
+                            <i class='fa-duotone fa-solid fa-handshake nav-bar-icons'></i>
+                            Add freinds
+                        </div>
+                    </a>
+                    <a href="/chats/" class="nav-item {% if request.path == '/chats/' %}active{% endif %}">
+                        <div class="nav-link ">
+                            
+                                <i class='fa-duotone fa-solid fa-feather nav-bar-icons'></i>
+                                Chat
+                        </div>
+                    </a>
                 </div>
 
-                <!-- {# CTA Button #} -->
-                <a href="/create-class/" class="create-button">Create a Classroom</a>
-                <a href="/available/" class="create-button">Find new classes</a>
-
-
-                <!-- {/* Bottom Settings */} -->
                 <div class="bottom-options">
-                    <div class="option-item">
-                        <span className="icon">⚙️</span> 
-                        Settings
+                    <div class="profile-section">
+                        <img class="profile-pic" src={{profile.photo.url}} alt="User" />
+                        <p class="user-name">{{profile.user.username}}</p>
                     </div>
-                    <a href="{% url 'accounts:logout' %}" class="option-item" >
+                    <a href="{% url 'accounts:logout' %}" class="logout-button" >
                         <span className="icon">🪵➡️</span> 
                         Logout
                     </a>
                 </div>
             </div>
-             <div id="create-class-button">
+
+             <div id="toggle-menu-button">
             </div>
-            <div class="body-container">
-                <div class="header-card">
-                        <h4>Welcome to panthiya</h4>
-                </div>
+
+            <div id="body-container">
                 {% block body %}
                 {% endblock %}
             </div>

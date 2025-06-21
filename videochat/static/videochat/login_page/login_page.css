@@ -10,22 +10,6 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
-.container-fluid{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#content-main{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-/* Container for the two boxes */
 .login-container {
     display: flex;
     width: 100%;
@@ -40,10 +24,10 @@ body, html {
     background-position: center;
 }
 
-/* Right box for the login form */
 .login-container .right-box {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #f4f4f4;
@@ -58,7 +42,14 @@ body, html {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
-
+.signup-form{
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
 .login-form h1 {
     margin-bottom: 20px;
     font-size: 24px;
@@ -74,45 +65,26 @@ body, html {
 }
 
 input[type="submit"] {
-  background-color: #E8B824;
-  color:white;
+    background-color: #FDD693;
+    color:rgb(0, 0, 0);
 }
 
 input[type="submit"]:hover {
-  background-color: #ffffff;
-  color:black;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 0px;
-    background-color: #007bff;
-    color: #E8B824;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.login-form button:hover {
-    background-color: #ffffff;
-}
-#signup-button{
-      background-color: #E8B824;
-      color:white;
-      padding:10px;
-      border: 1px solid #ccc;
-
-
-}
-#signup-button:hover{
     background-color: #ffffff;
     color:black;
 }
-.login-container .right-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
+
+
+#signup-button {
+    background-color: #FDD693;
+    color:rgb(0, 0, 0);
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
+#signup-button:hover {
+    background-color: #ffffff;
+}
+

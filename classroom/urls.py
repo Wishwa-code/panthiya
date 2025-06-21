@@ -36,7 +36,6 @@ urlpatterns = [
         auth.views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    path("accounts/profile/", profile, name="profile"),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('',include('videochat.urls')),
     

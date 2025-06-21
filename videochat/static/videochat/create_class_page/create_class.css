@@ -1,4 +1,12 @@
-/* Styles for Create Class page */
+/** Styles for Create Class page */
+#create-class-page{
+    height: 70%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 h2 {
     font-size: 24px;
@@ -10,9 +18,12 @@ form {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #D0D5DC;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: #1C2024;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+    color:#f0f0f0;
 }
 
 .form-group {
@@ -25,49 +36,30 @@ form {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
+.form-control:focus{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #FDD693;
+    border-radius: 4px;
+    box-shadow:none;
+}
 .form-control-file {
     margin-top: 10px;
 }
-
 #thumbnail-text{
-    color:black;
+    color:rgb(255, 255, 255);
 }
-
 .btn-primary {
-    background-color: #E8B824;
-    color: #ffffff;
+    background-color: #FDD693;
+    color: #000000;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     width:100%;
     border: 1px solid #ccc;
-
 }
-
 .btn-primary:hover {
     background-color: #ffffff;
     color:black;
-}
-
-a {
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-#create-class-page{
-    height: 70%;
-    width:100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
