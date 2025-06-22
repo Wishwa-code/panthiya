@@ -25,7 +25,7 @@ class MessageSerializer(serializers.Serializer):
             message.sender = self.context['request'].user
             message.receiver = user
             message.save()
-            print("message stored in created",message)
+            print(message.sender,"sent a message to ",message.receiver)
             self.__broadcast(message)
             return validated_data
         except Exception as e:
@@ -35,9 +35,8 @@ class MessageSerializer(serializers.Serializer):
         serializer = MessageModelSerializer(message, many=False)
         n_message = serializer.data
         n_message['read'] = False
-        print("this message is about to be broadcasted",n_message)
         channel_layer = get_channel_layer()
-        print("sending this channelge alyat: chat_",message.receiver.username)
+        print(f"Broadcasting {n_message} to chat_{message.receiver.username}")
         async_to_sync(channel_layer.group_send)(
             'chat_%s' % message.receiver.username, {
                 'type': 'new_message',

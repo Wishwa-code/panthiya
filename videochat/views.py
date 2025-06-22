@@ -32,7 +32,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from src.RtcTokenBuilder2 import *
+from agoraClassroomTokenBuilder.RtcTokenBuilder2 import *
 
 from videochat.authentication import BearerAuthentication
 from videochat.serializers import RegistrationSerializer, UsersWithMessageSerializer, UserSerializer, MessageSerializer, MessageModelSerializer
