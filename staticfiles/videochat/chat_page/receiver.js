@@ -1,6 +1,6 @@
-function Receiver ({remotedata}) {
-	const [callingStatus, setCallingStatus] = React.useState('calling');
-	const [peer, setPeer] = React.useState(null);
+function Receiver ({remotedata,current_host}) {
+	const [callingStatus, setCallingStatus] = React.useState('connected');
+	const peerRef = React.useRef(null);
 	const [conn, setConn] = React.useState(null);
 	const [call, setCall] = React.useState(null);
 	const [socket, setSocket] = React.useState(null);
@@ -22,6 +22,8 @@ function Receiver ({remotedata}) {
 		initializePeer(remotedata.data.peer_id);
 		window.addEventListener('beforeunload', handleBeforeUnload);
 
+		
+
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
@@ -33,17 +35,18 @@ function Receiver ({remotedata}) {
 
 	const initializePeer = (remotepeerid_in) => {
 		const newPeer = new Peer();
-		setPeer(newPeer);
+		peerRef.current = newPeer;
 
 		newPeer.on('open', (id) => {
-		console.log('My peer id', id);
+			console.log('My peer id', id);
+			answerCall();
 		});
 
 		newPeer.on('connection', (newConn) => {
-		setConn(newConn);
-		newConn.on('data', (data) => {
-			console.log('Received', data);
-		});
+			setConn(newConn);
+			newConn.on('data', (data) => {
+				console.log('Received', data);
+			});
 		});
 
 		initializeWebSocket(remotepeerid_in);
@@ -65,7 +68,9 @@ function Receiver ({remotedata}) {
 		
 		setCallingStatus('connected');
 		setLocalStream(stream); 
-		const newCall = peer.call(remotedata.data.peer_id, stream);
+		console.log("peer id", remotedata.data.peer_id, stream);
+		
+		const newCall = peerRef.current.call(remotedata.data.peer_id, stream);
 		setCall(newCall);
 		console.log(newCall);
 		newCall.on('stream', streamRemoteCall);
@@ -110,7 +115,7 @@ function Receiver ({remotedata}) {
 	};
 
 	const initializeWebSocket = (peer_id) => {
-		const newSocket = new WebSocket(`ws/message/${peer_id}/`);
+		const newSocket = new WebSocket(`${current_host}/ws/message/${peer_id}/`);
 		setSocket(newSocket);
 
 		newSocket.onmessage = (event) => {
@@ -131,37 +136,7 @@ function Receiver ({remotedata}) {
 
 	return (
 		<div style={{ height: '100vh' }} className="d-flex justify-content-center align-items-center">
-		{callingStatus === 'calling' && (
-			<div className="text-center align-self-center">
-			<center>
-				<div className="pulse">
-				<img
-					height="250"
-					src={displayUser.photo}
-					className="rounded-circle"
-					alt=""
-				/>
-				</div>
-			</center>
-			<h1 className="mt-5 text-black-50 mb-5">
-				Incoming call from <strong>{displayUser.name}</strong>
-			</h1>
-			<button
-				type="button"
-				onClick={answerCall}
-				className="btn btn-lg btn-success rounded-pill px-5 me-3"
-			>
-				<i className="fa-solid fa-phone"></i> Answer
-			</button>
-			<button
-				type="button"
-				onClick={rejectCall}
-				className="btn btn-lg btn-danger rounded-pill px-5"
-			>
-				<i className="fa-solid fa-phone" style={{ transform: 'rotate(133deg)' }}></i> Reject
-			</button>
-			</div>
-		)}
+
 
 		{callingStatus === 'connected' && (
 			<div>
@@ -182,4 +157,3 @@ function Receiver ({remotedata}) {
 		</div>
 	);
 };
-

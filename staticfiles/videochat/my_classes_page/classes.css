@@ -1,3 +1,5 @@
+/** This file contains css styles for both my classrooms page and available classrooms page */
+
 /* !------------- Class Page Styles -------------! */
 #create-class-cards{
   display: flex;
@@ -54,12 +56,7 @@
   width:100%;
   transition: transform 0.3s ease-in-out;
 }
-.container:not(.nav-collapsed) #main-component {
-  transform: translateX(250px);
-}
-.container.nav-collapsed #main-component {
-  transform: translateX(0);
-}
+
 .class-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
@@ -85,15 +82,16 @@
   }
 }
 
-/* Optional styling for each card */
 #index_classroom_wrapper {
-  /* border: 1px solid #ddd; */
   border-radius: 10px;
-  background-color: #000000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #1C2024;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+              0 8px 16px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.2s ease;
   height:310px;
+  border:0.2px solid;
+  border-color:#606C76;
 }
 
 .first-div-inside-classroom-card{
@@ -119,7 +117,7 @@
   transform: translateY(-5px);
 }
 
-#index_post_photo img {
+#index_classroom_thumbnail img {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -136,7 +134,7 @@
   padding-bottom:2px;
   margin-right: 8px;
   border-radius: 20px;
-  background-color: #111A22;
+  background-color: #606C76;
   color: #ffffff;
   font-size: 14px;
   white-space: nowrap;
@@ -144,8 +142,8 @@
 }
 
 .button-inside-join-card{
-  background-color: #E8B824; /* YouTube red */
-  color: white;
+  background-color: #FDD693;
+  color: rgb(0, 0, 0);
   border: none;
   padding: 10px 20px;
   border-radius: 3px;
@@ -158,7 +156,7 @@
 }
 
 .button-inside-join-card:hover {
-  background-color: #E8B824;
+  background-color: #FDD693;
   transform: scale(1.05);
 }
 
@@ -173,35 +171,26 @@
 
 .class_edit_button {
     width:40px;
-    color:#E8B824;
+    color:#FDD693;
     text-align:center;
     font-size: 17px;
 
 }
 
-/* !------------- Styles for the input fields populated for changing classroom details -------------! */
-
-.edit-class-name-input{
+.edit-class-subject-input{
   width: 150px;
   border-radius: 15px;
   padding-right:10px;
     padding-left:10px;
 }
 
-.edit-class-subject-input{
+.edit-class-other-input{
   width: 100px;
   margin-right:10px;
   border-radius: 15px;
-  padding-right:10px;
-  padding-left:10px;
-}
+    padding-right:10px;
+    padding-left:10px;
 
-.edit-class-grade-input{
-  width: 100px;
-  margin-right:10px;
-  border-radius: 15px;
-  padding-right:10px;
-  padding-left:10px;
 }
 
 .edit-classroom-image-input {
@@ -324,6 +313,7 @@ samp{
 }
 
 #participant-count{
+
   display: flex;
   align-items: center;
 }
@@ -331,3 +321,12 @@ samp{
 
 
 
+.btn-success{
+  color:#000000;
+  background-color:#FDD693;
+  border-color:none;
+}
+.btn-success:hover{
+  color:#000000;
+  background-color:#ffffff;
+}

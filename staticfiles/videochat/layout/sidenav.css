@@ -3,182 +3,128 @@
 #main-component{
     display:flex;
     flex-direction: row;
-    border: #E9B824 1px 1px;
 }
 
 /* !------------- Navigation bar styles -------------! */
 
 .navbar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items:start;
-  min-width: 300px;
-  height: 100vh;
-  background-color: #111A22;
-  color: white;
-  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  padding: 20px 15px;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:start;
+    min-width: 300px;
+    height: 100vh;
+    background-color: #000000;
+    color: #F4F7F6;
+    transition: width 1s ease-in-out, opacity 0.3s ease-in-out;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+                0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.navbar.visible {
-  display: absolute;
-  left:-220px;
-  min-width: 0px;
-  width:0px;
-  opacity: 0;
-  overflow: hidden;
-}
-.navbar ul {
-    list-style: none;
-    /* padding: 0; */
-}
-
-.navbar li {
-    /* padding: 10px; */
-    color: white;
-    cursor: pointer;
+.navbar.hide {
+    display: none;
+    left:-220px;
+    min-width: 0px;
+    width:0px;
+    opacity: 0;
+    overflow: hidden;
 }
 
 .top_bar_nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  width:100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    width:100%;
 }
 
 .nav-item {
-  display: flex;
-  align-items: center;
-  padding: 2px 4px;
-  border-radius: 10px;
-  gap: 10px;
-  cursor: pointer;
-  color: #cbd5e1;
-  margin-bottom: 10px;
-  transition: background 0.3s;
-  width: 100%;
-
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    gap: 10px;
+    cursor: pointer;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+    width: 100%;
 }
-.nav-bar-icons{
-  width:20px;
-  padding-left: 0px;
-  margin-right: 20px;
 
+.nav-bar-icons{
+    width:20px;
+    padding-left: 0px;
+    margin-right: 20px;
 }
 
 .nav-item:hover,
 .nav-item.active {
-  background-color: #1e293b;
-  color: white;
+    background-color: #FDD693;
+    color: rgb(0, 0, 0);
 }
 
-.nav-link {
-  margin: 0;
+.logout-button{
+    cursor:pointer;
 }
 
-.icon {
-  font-size: 18px;
-}
-
-.create-button {
-  width: 90%;
-  background-color: #E8B824;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: 600;
-  margin-top: 20px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.create-button:hover {
-  background-color: #bba667;
-}
-
-.bottom-options {
-  margin-top: 30px;
-    width:100%;
-
-}
-
-.option-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  cursor: pointer;
-  font-size: 14px;
-  color: #cbd5e1;
-}
-
-.option-item:hover {
-  color: white;
-}
 
 /* !------------- Toggle Button styles -------------! */
 
-
 /* Toggle Button Styles */
 .toggle-button {
-  position: absolute;
-  left: 0px;
-  top:0px;
-  z-index: 1100;
-  background-color: #E8B824;
-  color: #16161E;
-  border: none;
-  cursor: pointer;
-  transition: left 0.3s ease-in-out;
-  width: 50px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 27px; 
-  outline: none;
+    position: absolute;
+    left: 0px;
+    top:0px;
+    z-index: 1100;
+    background-color: #FDD693;
+    color: #16161E;
+    border: none;
+    cursor: pointer;
+    transition: left 0.3s ease-in-out;
+    width: 50px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 27px; 
+    outline: none;
 }
 
-.toggle-button.visible {
-  left: 300px;
+.toggle-button.hide {
+    left: 300px;
 }
 
 .chevron {
-  display: inline-block;
-  transition: transform 0.7s ease;
-  font-size: 40px;
-  transform-origin: 50% 50%;
-  vertical-align: middle;
-  padding-bottom: 10px;
+    display: inline-block;
+    transition: transform 0.7s ease;
+    font-size: 40px;
+    transform-origin: 50% 50%;
+    vertical-align: middle;
+    padding-bottom: 10px;
 }
 
 .rotate {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 
 /* !------------- Profile section styles -------------! */
 
 .profile-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  width: 100%;
-  padding-left: 10px;
-
-
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 20px;
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .user-name {
-  font-size: 16px;
-  font-weight: 500;
+    font-size: 16px;
+    font-weight: 500;
+    padding-top: 10px;
 }
 

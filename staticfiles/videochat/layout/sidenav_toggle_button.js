@@ -1,28 +1,35 @@
-ReactDOM.render(<ToggleButton />, document.querySelector("#create-class-button"));
+function ToggleButton() {
+  const [isVisible, setIsVisible] = React.useState(true);
 
-function ToggleButton ({}){
-    
-    // const csrftoken = getCookie('csrftoken');
-    const [isVisible, setIsVisible] = React.useState(false);
-    const toggle = () => setIsVisible(v => !v);
+  const toggle = () => {
+    const navbar = document.getElementById('side-navigation-bar');
 
+    if (isVisible) {
+      // Start transition
+      navbar.classList.add('hide');
 
-    React.useEffect(() => {
-      document
-        .getElementById('side-navigation-bar')
-        .classList.toggle('visible', isVisible);
-    }, [isVisible]);
+      // Wait for CSS transition to finish, then hide completely
+      setTimeout(() => {
+        navbar.style.display = 'none';
+      }, 1); // Match the transition duration
+    } else {
+      // Make visible again before removing class
+      navbar.style.display = 'flex';
 
+      // Force reflow to apply transition cleanly
+      void navbar.offsetWidth;
 
-  return(
-    
+      navbar.classList.remove('hide');
+    }
 
-        <>
-            <button className={`toggle-button ${!isVisible ? 'visible' : ''}`} onClick={toggle}>
-                <span className={`chevron ${!isVisible ? 'rotate' : ''}`}>&#8250;</span>
-            </button>
-        </>
+    setIsVisible(!isVisible);
+  };
 
+  return (
+    <button className={`toggle-button ${isVisible ? 'hide' : ''}`} onClick={toggle}>
+      <span className={`chevron ${isVisible ? 'rotate' : ''}`}>&#8250;</span>
+    </button>
+  );
+}
 
-      
-  )};
+ReactDOM.render(<ToggleButton />, document.querySelector("#toggle-menu-button"));

@@ -1,4 +1,11 @@
-function Sender ({selectedUser, currentuser}) {
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function Sender ({selectedUser, currentuser,current_host}) {
+    console.log("paremeters received to sender function", selectedUser, currentuser);
     const [displayUser, setDisplayUser] = React.useState({
         username: '',
         name: '',
@@ -14,10 +21,6 @@ function Sender ({selectedUser, currentuser}) {
 
     const localVideoRef = React.useRef(null);
     const remoteVideoRef = React.useRef(null);
-
-
-
-    console.log("printing here",selectedUser,currentuser);
 
     React.useEffect(() => {
         const parsedDisplay = "wishwa";
@@ -50,9 +53,9 @@ function Sender ({selectedUser, currentuser}) {
         newPeer.on('connection', (newConn) => {
         setConn(newConn);
         console.log("peer conncteion received",newConn);
-        newConn.on('data', (data) => {
-            console.log('Received', data);
-        });
+            newConn.on('data', (data) => {
+                console.log('Received', data);
+            });
         });
 
         newPeer.on('call', (newCall) => {
@@ -81,8 +84,6 @@ function Sender ({selectedUser, currentuser}) {
 
         const csrftoken = getCookie('csrftoken');
         console.log("csrf token at start, ", csrftoken)
-
-        console.log("methana sender",selectedUser.name, ",etana receiver", currentuser , "mehtan peer id",id);
 
         axios
         .post('start-call/', data, {
@@ -154,7 +155,7 @@ function Sender ({selectedUser, currentuser}) {
     };
 
     const initializeWebSocket = (peer_id) => {
-        const newSocket = new WebSocket(`ws/message/${peer_id}/`);
+        const newSocket = new WebSocket(`${current_host}/ws/message/${peer_id}/`);
         setSocket(newSocket);
 
         newSocket.onmessage = (event) => {
