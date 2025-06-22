@@ -198,6 +198,37 @@
 }
 
 
+/*typography and spacing */
+@media (max-width: 768px) {
+  #index_classroom_wrapper {
+    height:340px;
+  }
+  .second-div-inside-classroom-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .button-inside-join-card{
+    margin-top:10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .second-div-inside-classroom-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+  }
+  .second-div-inside-classroom-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .button-inside-join-card{
+    margin-top:10px;
+  }
+}
 /* !------------- User List Styles (connected users videos when in classroom-------------! */
 
 

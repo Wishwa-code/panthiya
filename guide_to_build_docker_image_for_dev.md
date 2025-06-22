@@ -73,3 +73,7 @@ apt-get install -y neovim
 # Collect static files
 RUN python manage.py collectstatic --noinput
 ```
+
+```
+python manage.py collectstatic --clear --noinput
+```

@@ -49,6 +49,18 @@ body {
     margin-right: 15px;
 }
 
+@media (max-width: 768px) {
+  .avatar {
+    display:none;
+}
+}
+
+@media (max-width: 480px) {
+  .avatar {
+    display:none;
+    }
+}
+
 
 .user-list {
     flex-grow: 1;
