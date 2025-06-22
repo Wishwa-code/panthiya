@@ -320,7 +320,7 @@ function ChatComponent ({}) {
                     {users.map(user => (
                         <div key={user.id} className={`user-list-item ${selectedUser && selectedUser.username === user.username ? 'active' : ''}`} onClick={() => handleUserClick(user)}>
                             <div className="avatar-container">
-                                <img src={user.photo} alt={user.username} className="avatar" />
+                                {/* <img src={user.photo} alt={user.username} className="avatar" /> */}
                                 <span className={`online-indicator ${user.online ? 'online' : 'offline'}`}></span>
                             </div>
                             <div className="user-info">
