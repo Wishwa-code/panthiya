@@ -74,13 +74,20 @@ function Receiver ({remotedata,current_host}) {
 		setCall(newCall);
 		console.log(newCall);
 		newCall.on('stream', streamRemoteCall);
-		localVideoRef.current.srcObject = stream;
-		localVideoRef.current.play();
+		// localVideoRef.current.srcObject = stream;
+		// localVideoRef.current.play();
+		if (localVideoRef.current) {
+			localVideoRef.current.srcObject = stream; // .play() call removed
+		}	
 	};
 
 	const streamRemoteCall = (remoteStream) => {
-		remoteVideoRef.current.srcObject = remoteStream;
-		remoteVideoRef.current.play();
+		// remoteVideoRef.current.srcObject = remoteStream;
+		// remoteVideoRef.current.play();
+		// console.log("Remote stream");
+		if (remoteVideoRef.current) {
+			remoteVideoRef.current.srcObject = remoteStream; // .play() call removed
+		}
 		console.log("Remote stream");
 	};
 
@@ -140,8 +147,8 @@ function Receiver ({remotedata,current_host}) {
 
 		{callingStatus === 'connected' && (
 			<div>
-			<video ref={localVideoRef} id="localVideo" autoPlay></video>
-			<video ref={remoteVideoRef} id="remoteVideo" autoPlay></video>
+			<video ref={localVideoRef} id="localVideo" autoPlay muted playsInline></video>
+			<video ref={remoteVideoRef} id="remoteVideo" autoPlay playsInline></video>
 
 			<div className="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10">
 				<button clickCallback={toggleLocalAudio} > audio </button>

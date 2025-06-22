@@ -204,8 +204,8 @@ function Sender ({selectedUser, currentuser,current_host}) {
 
         {callingStatus === 'connected' && (
             <div>
-            <video ref={localVideoRef} id="localVideo" autoPlay></video>
-            <video ref={remoteVideoRef} id="remoteVideo" autoPlay></video>
+            <video ref={localVideoRef} id="localVideo" autoPlay muted playsInline></video>
+            <video ref={remoteVideoRef} id="remoteVideo" autoPlay playsInline></video>
 
             <div className="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10">
                 <button clickCallback={toggleLocalAudio} > Audio </button>
