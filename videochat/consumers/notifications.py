@@ -38,6 +38,7 @@ class NewUserConsumer(WebsocketConsumer):
             'status': 'status_change'
         }))
 
+
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,

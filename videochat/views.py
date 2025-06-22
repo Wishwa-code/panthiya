@@ -10,7 +10,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from django.contrib.auth.models import User
-from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.paginator import Paginator
 from django.dispatch import receiver
 from django.http import JsonResponse
@@ -453,18 +453,28 @@ class CreateChannelView(APIView):
         })
 
 @receiver(user_logged_in)
-def my_custom_function_on_login(sender, request, user, **kwargs):
+def user_logged_in_handler(sender, request, user, **kwargs):
     print(f"SIGNAL: User {user.username} just logged in.")
-    _change_status(user)
+    _change_status(user,True)
+
+
+@receiver(user_logged_out)
+def user_logged_out_handler(sender, request, user, **kwargs):
+    """
+    Handles user logout by setting their profile to offline.
+    """
+    print(f"SIGNAL: User {user.username} just logged out.")
+    if user:
+        _change_status(user,False)
     
 
 
-def _change_status(user: User):
+def _change_status(user: User, is_online: bool):
         """
         @param user:
         """
         profile = user.profile
-        profile.online = True
+        profile.online = is_online
         profile.save()
         notify_others(user)
 
