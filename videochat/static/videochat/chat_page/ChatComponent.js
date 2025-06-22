@@ -100,9 +100,17 @@ function ChatComponent ({}) {
 
     const dataForReceiverUser = selectedUser ? users.find(user => user.username === selectedUser.username) : null;
 
-    React.useEffect(() => {
+    const host = window.location.host;
 
-        console.log(window.__INITIAL_DATA__.username)
+    let protocol;
+    if (host != "localhost:8000"){
+        protocol = 'wss'
+    }else{
+        protocol = 'ws'
+    }
+    let current_host = `${protocol}://${host}`;
+
+    React.useEffect(() => {
 
         axios.get('users/')
         .then(response => {
@@ -116,8 +124,9 @@ function ChatComponent ({}) {
             console.log(error);
         });
 
-        window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/';
-        messageConnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${window.__INITIAL_DATA__.username}/`);
+        let message_channel = `${current_host}/ws/message/${window.__INITIAL_DATA__.username}/`;
+
+        messageConnectionRef.current = new WebSocket(message_channel);
         console.log(messageConnectionRef);
 
         messageConnectionRef.current.onmessage = (event) => {
@@ -164,11 +173,9 @@ function ChatComponent ({}) {
     const notificationconnectionRef = React.useRef(null);
 
     React.useEffect(() => {
-        window.REACT_APP_WS_ENDPOINT = 'ws://127.0.0.1:8000/'
+        let notification_channel = `${current_host}/ws/notification/`;
 
-        notificationconnectionRef.current = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/notification/`);
-
-        console.log(notificationconnectionRef)
+        notificationconnectionRef.current = new WebSocket(notification_channel);
 
         notificationconnectionRef.current.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -281,7 +288,7 @@ function ChatComponent ({}) {
 
             {isCalling && selectedUser && (
                 <NewWindow onUnload={() => setIsCalling(false)}>
-                    <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username} />
+                    <Sender selectedUser={selectedUser} currentuser={window.__INITIAL_DATA__.username} current_host={current_host} />
                 </NewWindow>
             )}
 
@@ -290,7 +297,7 @@ function ChatComponent ({}) {
                     setShowReceiverPopup(false);
                     setReceivingCallData(null);
                 }}>
-                    <Receiver remotedata={receivingCallData} />
+                    <Receiver remotedata={receivingCallData} current_host={current_host}/>
                 </NewWindow>
             )}
 

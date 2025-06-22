@@ -1,4 +1,4 @@
-function Receiver ({remotedata}) {
+function Receiver ({remotedata,current_host}) {
 	const [callingStatus, setCallingStatus] = React.useState('connected');
 	const peerRef = React.useRef(null);
 	const [conn, setConn] = React.useState(null);
@@ -115,7 +115,7 @@ function Receiver ({remotedata}) {
 	};
 
 	const initializeWebSocket = (peer_id) => {
-		const newSocket = new WebSocket(`${window.REACT_APP_WS_ENDPOINT}ws/message/${peer_id}/`);
+		const newSocket = new WebSocket(`${current_host}/ws/message/${peer_id}/`);
 		setSocket(newSocket);
 
 		newSocket.onmessage = (event) => {
@@ -157,38 +157,3 @@ function Receiver ({remotedata}) {
 		</div>
 	);
 };
-
-
-
-
-		{/* {callingStatus === 'calling' && (
-			<div className="text-center align-self-center">
-			<center>
-				<div className="pulse">
-				<img
-					height="250"
-					src={displayUser.photo}
-					className="rounded-circle"
-					alt=""
-				/>
-				</div>
-			</center>
-			<h1 className="mt-5 text-black-50 mb-5">
-				Incoming call from <strong>{displayUser.name}</strong>
-			</h1>
-			<button
-				type="button"
-				onClick={answerCall}
-				className="btn btn-lg btn-success rounded-pill px-5 me-3"
-			>
-				<i className="fa-solid fa-phone"></i> Answer
-			</button>
-			<button
-				type="button"
-				onClick={rejectCall}
-				className="btn btn-lg btn-danger rounded-pill px-5"
-			>
-				<i className="fa-solid fa-phone" style={{ transform: 'rotate(133deg)' }}></i> Reject
-			</button>
-			</div>
-		)} */}
