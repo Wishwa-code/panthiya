@@ -1,0 +1,261 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+}
+
+#main-component{
+    height:100%;
+}
+
+/* Chat Container */
+.chat-container {
+    display: flex;
+    height: 100%;
+    width:100%;
+    border: 1px solid #ddd;
+    background-color: #F4F7F6;
+    color:#1C2024;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 30%;
+    max-width: 350px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header, .search-bar {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f6f6f6;
+}
+
+.sidebar-header .user-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+
+.user-list {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.user-list-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.user-list-item:hover {
+    background-color: #f5f5f5;
+}
+
+.user-list-item.active {
+    background-color: #D0D5DC;
+}
+
+.user-list-item .user-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    max-height:4.5em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    width:70%;
+    
+}
+
+.username {
+    font-weight: bold;
+}
+
+.last-message, .timestamp {
+    font-size: 0.85em;
+    color: #606C76;
+    
+}
+
+.timestamp{
+    font-size:10px;
+    text-align:right;
+}
+
+/* Chat Window */
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F7F6;
+    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-position: top;
+    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+}
+
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F7F6;
+    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-position: top;
+    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+}
+
+.placeholder{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-header .user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header .status {
+    font-size: 0.8em;
+    color: #606C76;
+}
+
+.chat-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-container {
+    max-width: 60%;
+    margin-bottom: 10px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.message-container .timestamp {
+    font-size: 0.75em;
+    color: #606C76;
+    margin-top: 2px;
+}
+
+/* Received Messages */
+.message-container.received {
+    align-self: flex-start;
+}
+
+.message-container.received .message {
+    background-color: #84b0dd;
+    border-top-left-radius: 0;
+}
+.message-container.received .timestamp {
+    text-align: left;
+}
+
+
+/* Sent Messages */
+.message-container.sent {
+    align-self: flex-end;
+}
+
+.message-container.sent .message {
+    background-color: #D0D5DC;
+    color:#1C2024;
+    border-top-right-radius: 0;
+}
+
+.message-container.sent .timestamp {
+    text-align: right;
+}
+
+
+.chat-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding:15px;
+    background-color: #F4F7F6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+}
+.chat-receiver-data{
+    display:flex;
+    flex-direction: row;
+}
+/* Chat Input */
+.chat-input {
+    padding: 10px 20px;
+    background-color: #f6f6f6;
+}
+
+.chat-input input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-right: 20px;
+}
+
+.call-button{
+    background-color: #FDD693; /* YouTube red */
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  
+}
+
+
+
+
+.avatar-container {
+    position: relative;
+    display: inline-block; /* Or flex, depending on your layout */
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: -2px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white; /* To make it stand out from the avatar */
+}
+
+.online-indicator.online {
+    background-color: #28a745; /* Green for online */
+}
+
+.online-indicator.offline {
+    background-color: #6c757d; /* Grey for offline */
+}

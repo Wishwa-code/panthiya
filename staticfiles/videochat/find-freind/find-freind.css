@@ -1,0 +1,140 @@
+/** this page contains styles for add freinds page */
+
+#main-component {
+    display: flex;
+    flex-direction: column;
+    padding-left:75px;
+    padding-right: 75px;
+    padding-bottom: 20px;
+    width:100%;
+    transition: transform 0.3s ease-in-out;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tab-buttons {
+    display: flex;
+    background-color: #111A22;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.tab-button {
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    flex-grow: 1;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover {
+    background-color: #FDD693;
+    color:#111A22;
+}
+.tab-button.active {
+    background-color: #FDD693;
+    color:#111A22;
+    border-bottom: 3px solid #FDD693;
+    color:#111A22;
+}
+.tab-pane {
+    display: none;
+}
+.tab-pane.active {
+    display: block;
+}
+.content-padding { 
+    padding-top: 20px; 
+}
+.form-group { 
+    display: flex; 
+    margin-bottom: 20px; 
+}
+.form-group input { 
+    flex-grow: 1; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+}
+.form-group button { 
+    padding: 8px 12px; 
+    margin-left:20px;
+    background-color:#FDD693;
+    cursor: pointer; 
+    color:black;
+}
+.user-card { 
+    border: 1px solid #eee; 
+}
+.user-card-header { 
+    padding: 10px; 
+    background: #f9f9f9; 
+    font-weight: bold; 
+    color:#111A22;
+}
+.user-card-body { 
+    padding: 15px; 
+    display: flex; 
+    justify-content: space-between; 
+}
+
+#send-request-btn{
+    background-color: #FDD693;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width:100%;
+    border: 1px solid #ccc;
+}
+.action-section, .details-section { 
+    width: 48%; 
+}
+.error-message { 
+    color: red; 
+    padding: 10px; 
+    border: 1px solid red; 
+    background-color: #ffdddd; 
+}
+.request-list { 
+    list-style: none; 
+    padding: 0; 
+}
+.request-list-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px; 
+    border-bottom: 1px solid #eee; 
+}
+.request-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+.request-count { 
+    background-color: #dc3545;
+    color: white; 
+    border-radius: 50%; 
+    padding: 2px 6px; 
+    font-size: 12px; 
+    vertical-align: top; 
+}
+.status-badge { 
+    padding: 5px 8px; 
+    border-radius: 4px; 
+    color: white; 
+}
+.status-badge.success { 
+    background-color: #28a745; 
+}
+.status-badge.secondary { 
+    background-color: #6c757d;
+}
+.status-badge.info { 
+    background-color: #17a2b8; 
+}
