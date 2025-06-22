@@ -103,9 +103,9 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #F4F7F6;
-    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-repeat: no-repeat; 
     background-position: top;
-    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+    background-image: url('/media/style_resources/chat_background.png'); 
 }
 
 .chat-window {
@@ -113,9 +113,9 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #F4F7F6;
-    background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
+    background-repeat: no-repeat; 
     background-position: top;
-    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+    background-image: url('/media/style_resources/chat_background.png'); 
 }
 
 .placeholder{

@@ -105,7 +105,7 @@ body {
     background-color: #F4F7F6;
     background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
     background-position: top;
-    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+    background-image: url('/media/style_resources/chat_background.png'); /* WhatsApp-like background */
 }
 
 .chat-window {
@@ -115,7 +115,7 @@ body {
     background-color: #F4F7F6;
     background-repeat: no-repeat; /* Crucial to prevent the image from tiling */
     background-position: top;
-    background-image: url('/media/chat_background.png'); /* WhatsApp-like background */
+    background-image: url('/media/style_resources/chat_background.png'); /* WhatsApp-like background */
 }
 
 .placeholder{

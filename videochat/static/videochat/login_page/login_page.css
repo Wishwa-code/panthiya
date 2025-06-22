@@ -19,7 +19,7 @@ body, html {
 /* Left box for the image */
 .login-container .left-box {
     flex: 1;
-    background-image: url('/media/cover1.png'); /* Replace with your image path */
+    background-image: url('/media/style_resources/cover1.png'); /* Replace with your image path */
     background-size: cover;
     background-position: center;
 }
