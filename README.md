@@ -86,11 +86,11 @@ The following technical decisions were taken to ensure the final application is 
 #### **High-Level Design:**
 
 -   **Classroom Feature**
-  ![Diagram of the classroom feature](./design/classroom.png)
+  ![Diagram of the classroom feature](./design_diagrams/classroom.png)
 -   **Video Call Feature**
-![Diagram of the classroom feature](./design/videocall.png)
+![Diagram of the classroom feature](./design_diagrams/videocall.png)
 -   **Chat Feature**
-![Diagram of the classroom feature](./design/chat.png)
+![Diagram of the classroom feature](./design_diagrams/chat.png)
 ---
 
 ### **3.1 Setting up Development Environment**
