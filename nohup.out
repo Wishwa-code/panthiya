@@ -1146,3 +1146,25 @@
 655:M 22 Jun 2025 09:33:08.865 * Done loading RDB, keys loaded: 7, keys expired: 20.
 655:M 22 Jun 2025 09:33:08.865 * DB loaded from disk: 0.008 seconds
 655:M 22 Jun 2025 09:33:08.865 * Ready to accept connections
+655:signal-handler (1750584843) Received SIGINT scheduling shutdown...
+655:M 22 Jun 2025 09:34:03.873 # User requested shutdown...
+655:M 22 Jun 2025 09:34:03.874 * Saving the final RDB snapshot before exiting.
+655:M 22 Jun 2025 09:34:03.892 * DB saved on disk
+655:M 22 Jun 2025 09:34:03.892 # Redis is now ready to exit, bye bye...
+676:C 23 Jun 2025 08:35:27.592 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+676:C 23 Jun 2025 08:35:27.594 # Redis version=7.0.15, bits=64, commit=00000000, modified=0, pid=676, just started
+676:C 23 Jun 2025 08:35:27.595 # Configuration loaded
+676:M 23 Jun 2025 08:35:27.597 * monotonic clock: POSIX clock_gettime
+676:M 23 Jun 2025 08:35:27.614 * Running mode=standalone, port=6379.
+676:M 23 Jun 2025 08:35:27.616 # Server initialized
+676:M 23 Jun 2025 08:35:27.670 * Loading RDB produced by version 7.0.15
+676:M 23 Jun 2025 08:35:27.670 * RDB age 82884 seconds
+676:M 23 Jun 2025 08:35:27.670 * RDB memory usage when created 1.04 Mb
+676:M 23 Jun 2025 08:35:27.674 * Done loading RDB, keys loaded: 3, keys expired: 4.
+676:M 23 Jun 2025 08:35:27.674 * DB loaded from disk: 0.037 seconds
+676:M 23 Jun 2025 08:35:27.675 * Ready to accept connections
+676:signal-handler (1750667733) Received SIGINT scheduling shutdown...
+676:M 23 Jun 2025 08:35:33.137 # User requested shutdown...
+676:M 23 Jun 2025 08:35:33.138 * Saving the final RDB snapshot before exiting.
+676:M 23 Jun 2025 08:35:33.157 * DB saved on disk
+676:M 23 Jun 2025 08:35:33.157 # Redis is now ready to exit, bye bye...
