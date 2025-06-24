@@ -102,12 +102,12 @@ The following technical decisions were taken to ensure the final application is 
 
 1.  Go to the root directory where this project is stored and use the following command to build a Docker image using the Dockerfile.
     ```bash
-    docker build -t panthiya .
+    docker build -t <container_name> .
     ```
 
 2.  Run the Docker container using the generated image and go into the shell inside the Docker container while mirroring the changes you made to the codebase. (When you make a change to your codebase from the host environment, it will be reflected in the application running inside the Docker container).
     ```bash
-    docker run --rm -it -p 8000:8000 -v "C:/_projects/panthiya/panthiya:/app" -w /app panthiya:latest /bin/sh
+    docker run --rm -it -p 8000:8000 -v "<path to project directory>" -w /app <container_name>:latest /bin/sh
     ```
 
 3.  Now run the `start.sh` file to start the Redis server and Django server (make sure the `start.sh` file uses the LF end-of-line convention by opening the file in VS Code and checking the file type; if not, it can be changed using VS Code).
