@@ -5,18 +5,14 @@ function ToggleButton() {
     const navbar = document.getElementById('side-navigation-bar');
 
     if (isVisible) {
-      // Start transition
       navbar.classList.add('hide');
 
-      // Wait for CSS transition to finish, then hide completely
       setTimeout(() => {
         navbar.style.display = 'none';
-      }, 1); // Match the transition duration
+      }, 1); 
     } else {
-      // Make visible again before removing class
       navbar.style.display = 'flex';
 
-      // Force reflow to apply transition cleanly
       void navbar.offsetWidth;
 
       navbar.classList.remove('hide');

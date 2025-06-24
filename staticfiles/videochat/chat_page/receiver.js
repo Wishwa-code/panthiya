@@ -77,7 +77,7 @@ function Receiver ({remotedata,current_host}) {
 		// localVideoRef.current.srcObject = stream;
 		// localVideoRef.current.play();
 		if (localVideoRef.current) {
-			localVideoRef.current.srcObject = stream; // .play() call removed
+			localVideoRef.current.srcObject = stream; 
 		}	
 	};
 
@@ -86,7 +86,7 @@ function Receiver ({remotedata,current_host}) {
 		// remoteVideoRef.current.play();
 		// console.log("Remote stream");
 		if (remoteVideoRef.current) {
-			remoteVideoRef.current.srcObject = remoteStream; // .play() call removed
+			remoteVideoRef.current.srcObject = remoteStream; 
 		}
 		console.log("Remote stream");
 	};

@@ -182,3 +182,8 @@ The following technical decisions were taken to ensure the final application is 
     ```bash
     python manage.py runserver
     ```
+
+
+
+Current SuperUser Name: wishwa
+password:1234

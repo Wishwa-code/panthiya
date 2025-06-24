@@ -474,10 +474,14 @@ def _change_status(user: User, is_online: bool):
         """
         @param user:
         """
-        profile = user.profile
-        profile.online = is_online
-        profile.save()
-        notify_others(user)
+        try:    
+            profile = user.profile
+            profile.online = is_online
+            profile.save()
+            notify_others(user)
+        except Exception as e:
+            print("no profile found ${e}")
+        
 
 def notify_others(user: User):
     """

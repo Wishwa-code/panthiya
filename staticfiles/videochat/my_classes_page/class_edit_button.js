@@ -23,13 +23,12 @@ function edit_post(event) {
     const isEditing = icon.classList.contains("fa-pen");
 
     if (isEditing) {
-        // 👇 Switch to save state
         icon.classList.remove("fa-pen");
         icon.classList.add("fa-save");
 
         const imageInput = document.getElementById(`classroom-image-input-${classroomId}`);
         if (imageInput) {
-            imageInput.style.display = 'block';  // Show file input
+            imageInput.style.display = 'block';  
         }
 
         const nameDiv = document.getElementById(classroomId);
@@ -56,7 +55,6 @@ function edit_post(event) {
         gradeDiv.replaceWith(gradeInput);
 
     } else if (icon.classList.contains("fa-save")) {
-    // 👇 Switch to view state and save data
         icon.classList.remove("fa-save");
         icon.classList.add("fa-pen");
 
@@ -83,13 +81,13 @@ function edit_post(event) {
         formData.append('updated_grade', updatedGrade);
 
         if (selectedImageFile) {
-            formData.append('image', selectedImageFile);  // Append image only if selected
+            formData.append('image', selectedImageFile);  
         }
 
-        formData.append('_method', 'PUT');  // 👈 tells backend this is actually a PUT
+        formData.append('_method', 'PUT');  
 
         fetch(`/editClassroom/${classroomId}`, {
-            method: 'POST',                   // 👈 POST lets Django parse form data & files
+            method: 'POST',                   
             body: formData
             })
             .then(response => response.json())
@@ -106,7 +104,7 @@ function edit_post(event) {
             reader.onload = function(e) {
                 const imageElement = document.querySelector(`#classroom-image-${classroomId}`);
                 if (imageElement) {
-                imageElement.src = e.target.result;  // Preview new image
+                imageElement.src = e.target.result;  
                 }
             };
             reader.readAsDataURL(selectedImageFile);
