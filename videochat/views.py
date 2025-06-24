@@ -314,7 +314,7 @@ def send_friend_request(request, user_id):
     
 @require_POST
 @csrf_exempt
-def accept_friend_request(request, request_id): # ✨ New View
+def accept_friend_request(request, request_id): 
     if not request.user.is_authenticated:
         return JsonResponse({"error": "Authentication required"}, status=401)
     
@@ -352,7 +352,6 @@ class MessageView(CreateAPIView):
         
         user = User.objects.get(pk=1)
         return self.create(request, *args, **kwargs)
-# Create your views here.
 
 class UsersView(generics.ListAPIView):
     serializer_class = UsersWithMessageSerializer
