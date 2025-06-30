@@ -16,7 +16,7 @@
         <form action="{% url 'createClass' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <input id="class-name" autofocus class="form-control" type="text" name="classname" placeholder="Class name">
+                <input id="class-name" autofocus class="form-control" type="text" name="classname" placeholder="Class name without spaces">
             </div>
 
             <div class="form-group">

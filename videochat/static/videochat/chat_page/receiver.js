@@ -49,6 +49,22 @@ function Receiver ({remotedata,current_host}) {
 			});
 		});
 
+		// newPeer.on('call', (incomingCall) => {
+		// 	navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+		// 		.then((stream) => {
+		// 			incomingCall.answer(stream); 
+		// 			setLocalStream(stream);
+		// 			if (localVideoRef.current) {
+		// 				localVideoRef.current.srcObject = stream;
+		// 			}
+		// 			incomingCall.on('stream', (remoteStream) => {
+		// 				if (remoteVideoRef.current) {
+		// 					remoteVideoRef.current.srcObject = remoteStream;
+		// 				}
+		// 			});
+		// 		});
+		// });
+
 		initializeWebSocket(remotepeerid_in);
 	};
 
@@ -57,7 +73,7 @@ function Receiver ({remotedata,current_host}) {
 			navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
 			.then((stream) => {
-			streamCall(stream);
+				streamCall(stream);
 			})
 		} else {
 			console.error('getUserMedia is not supported in this environment.');
@@ -74,20 +90,20 @@ function Receiver ({remotedata,current_host}) {
 		setCall(newCall);
 		console.log(newCall);
 		newCall.on('stream', streamRemoteCall);
-		// localVideoRef.current.srcObject = stream;
-		// localVideoRef.current.play();
-		if (localVideoRef.current) {
-			localVideoRef.current.srcObject = stream; 
-		}	
+		localVideoRef.current.srcObject = stream;
+		localVideoRef.current.play();
+		// if (localVideoRef.current) {
+		// 	localVideoRef.current.srcObject = stream; 
+		// }	
 	};
 
 	const streamRemoteCall = (remoteStream) => {
-		// remoteVideoRef.current.srcObject = remoteStream;
-		// remoteVideoRef.current.play();
-		// console.log("Remote stream");
-		if (remoteVideoRef.current) {
-			remoteVideoRef.current.srcObject = remoteStream; 
-		}
+		remoteVideoRef.current.srcObject = remoteStream;
+		remoteVideoRef.current.play();
+		console.log("Remote stream");
+		// if (remoteVideoRef.current) {
+		// 	remoteVideoRef.current.srcObject = remoteStream; 
+		// }
 		console.log("Remote stream");
 	};
 

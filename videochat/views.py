@@ -418,40 +418,39 @@ class EndCall(APIView):
             return Response({'hello': 'world'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#this file is not used and its functionality has been moved to index file to provide token for every class user has joined
-# class CreateChannelView(APIView):
-#     def post(self, request):
+class CreateChannelView(APIView):
+    def post(self, request):
         
-#         channel_name = request.data.get('channelName', 'testChannel' + os.urandom(8).hex())
-#         print(channel_name)
+        channel_name = request.data.get('channelName', 'testChannel' + os.urandom(8).hex())
+        print(channel_name)
         
-#         uid = request.data.get('uid', 0) 
+        uid = request.data.get('uid', 0) 
         
-#         app_id = '95c3c83fa4a34edc8ed24e22eed1bd82'  
-#         app_certificate = '21bf9ec600454bd7954551057fa5581f'
-#         # token = '007eJxTYMjwYnfireo2MxRIVbgeve9c3NanGy/tO/lFagrrxah76boKDJamycbJFsZpiSaJxiapKckWqSlGJqlGRqmpKYZJKRZGa1uvpjUEMjKwuMezMDJAIIjPzJCRmcnAAAD9PR7O'   
+        app_id = '95c3c83fa4a34edc8ed24e22eed1bd82'  
+        app_certificate = '21bf9ec600454bd7954551057fa5581f'
+        # token = '007eJxTYMjwYnfireo2MxRIVbgeve9c3NanGy/tO/lFagrrxah76boKDJamycbJFsZpiSaJxiapKckWqSlGJqlGRqmpKYZJKRZGa1uvpjUEMjKwuMezMDJAIIjPzJCRmcnAAAD9PR7O'   
         
-#         # Token validity time in seconds
-#         token_expiration_in_seconds = 3600
+        # Token validity time in seconds
+        token_expiration_in_seconds = 3600
 
-#         # The validity time of all permissions in seconds
-#         privilege_expiration_in_seconds = 3600
+        # The validity time of all permissions in seconds
+        privilege_expiration_in_seconds = 3600
 
 
-#         if not app_id or not app_certificate:
-#             print("Need to set environment variable AGORA_APP_ID and AGORA_APP_CERTIFICATE")
-#             return
-#         # Generate Token
-#         token = RtcTokenBuilder.build_token_with_uid(app_id, app_certificate, channel_name, uid, Role_Publisher,
-#                                                     token_expiration_in_seconds, privilege_expiration_in_seconds)
-#         print("Token with int uid: {}".format(token))
+        if not app_id or not app_certificate:
+            print("Need to set environment variable AGORA_APP_ID and AGORA_APP_CERTIFICATE")
+            return
+        # Generate Token
+        token = RtcTokenBuilder.build_token_with_uid(app_id, app_certificate, channel_name, uid, Role_Publisher,
+                                                    token_expiration_in_seconds, privilege_expiration_in_seconds)
+        print("Token with int uid: {}".format(token))
         
-#         return JsonResponse({
-#             'status': 'success',
-#             'token': token,
-#             'channel_name': channel_name,
-#             'uid': uid
-#         })
+        return JsonResponse({
+            'status': 'success',
+            'token': token,
+            'channel_name': channel_name,
+            'uid': uid
+        })
 
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, user, **kwargs):

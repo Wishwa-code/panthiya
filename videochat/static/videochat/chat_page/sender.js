@@ -44,32 +44,32 @@ function Sender ({selectedUser, currentuser,current_host}) {
         setPeer(newPeer);
 
         newPeer.on('open', (id) => {
-        console.log(id);
-        setPeerId(id);
-        startCall(id);
-        initializeWebSocket(id);
+            console.log(id);
+            setPeerId(id);
+            startCall(id);
+            initializeWebSocket(id);
         });
 
         newPeer.on('connection', (newConn) => {
-        setConn(newConn);
-        console.log("peer conncteion received",newConn);
+            setConn(newConn);
+            console.log("peer conncteion received in sender",newConn);
             newConn.on('data', (data) => {
                 console.log('Received', data);
             });
         });
 
         newPeer.on('call', (newCall) => {
-        setCall(newCall);
-        console.log("new call received",newCall);
-        navigator.mediaDevices
-            .getUserMedia({ video: true, audio: true })
-            .then((stream) => {
-            streamCall(newCall,stream);
-            });
+            setCall(newCall);
+            console.log("new call received",newCall);
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: true })
+                .then((stream) => {
+                streamCall(newCall,stream);
+                });
         });
 
         newPeer.on('error', () => {
-        console.log('peer errors');
+            console.log('peer errors');
         });
     };
     
@@ -105,12 +105,18 @@ function Sender ({selectedUser, currentuser,current_host}) {
         setCallingStatus('connected');
         newCall.answer(stream);
         setLocalStream(stream);
-        localVideoRef.current.srcObject = stream;
+        // localVideoRef.current.srcObject = stream;
         newCall.on('stream', streamRemoteCall);
+        if (localVideoRef.current) {
+			localVideoRef.current.srcObject = stream; 
+		}	
     };
 
     const streamRemoteCall = (remoteStream) => {
-        remoteVideoRef.current.srcObject = remoteStream;
+        // remoteVideoRef.current.srcObject = remoteStream;
+        if (remoteVideoRef.current) {
+			remoteVideoRef.current.srcObject = remoteStream; 
+		}
     };
 
     const toggleLocalVideo = () => {
@@ -205,7 +211,7 @@ function Sender ({selectedUser, currentuser,current_host}) {
         {callingStatus === 'connected' && (
             <div>
             <video ref={localVideoRef} id="localVideo" autoPlay muted playsInline></video>
-            <video ref={remoteVideoRef} id="remoteVideo" autoPlay playsInline></video>
+            <video ref={remoteVideoRef} id="remoteVideo" autoPlay muted playsInline></video>
 
             <div className="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10">
                 <button clickCallback={toggleLocalAudio} > Audio </button>
